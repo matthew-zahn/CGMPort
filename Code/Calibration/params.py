@@ -99,8 +99,22 @@ b3=0.0019704/100
 
 t_start = 21
 t_ret   = 65
-y_avg = np.arange(t_start, t_ret+1,1)
-y_avg = a + b1*y_avg + b2*(y_avg**2) + b3*(y_avg**3)
-y_avg = np.exp(y_avg)
+t_end   = 80
 
-plt.plot(y_avg)
+# They assume retirement income is a fraction of labor income in the
+# last working period
+repl_fac = 0.68212
+
+# Compute average income at each point in (working) life
+f = np.arange(t_start, t_ret+1,1)
+f = a + b1*f + b2*(f**2) + b3*(f**3)
+f = np.exp(f)
+
+# Retirement income
+ret_inc = repl_fac*f[-1]*np.ones(t_end - t_ret)
+
+# Get a full vector of the deterministic part of income
+det_income = np.concatenate((f, ret_inc))
+
+# Plot
+plt.plot(range(t_start,t_end+1),det_income)
