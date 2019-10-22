@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 n = 80
 
@@ -87,3 +88,19 @@ survprob[80] = 0.6809
 
 # Fix indexing problem (fortran starts at 1, python at 0)
 survprob = np.delete(survprob, [0])
+
+# Labor income
+
+# They assume its a polinomial of age. Here are the coefficients
+a=-2.170042+2.700381
+b1=0.16818
+b2=-0.0323371/10
+b3=0.0019704/100
+
+t_start = 21
+t_ret   = 65
+y_avg = np.arange(t_start, t_ret+1,1)
+y_avg = a + b1*y_avg + b2*(y_avg**2) + b3*(y_avg**3)
+y_avg = np.exp(y_avg)
+
+plt.plot(y_avg)
