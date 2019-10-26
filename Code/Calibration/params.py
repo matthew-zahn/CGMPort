@@ -1,9 +1,15 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
+# %% Preferences
+
+# Relative risk aversion
+CRRA = 10
+# Discount factor
+DiscFac = 0.96
+
+# Survival probabilities from the author's Fortran code
 n = 80
-
-# Survival probabilities
 survprob = np.zeros(n+1)
 survprob[1] = 0.99845
 survprob[2] = 0.99839
@@ -87,7 +93,7 @@ survprob[79] = 0.6961
 survprob[80] = 0.6809
 
 # Fix indexing problem (fortran starts at 1, python at 0)
-survprob = np.delete(survprob, [0])
+survprob = np.delete(survprob, [0,1])
 
 # Labor income
 
@@ -97,9 +103,10 @@ b1=0.16818
 b2=-0.0323371/10
 b3=0.0019704/100
 
-t_start = 21
+t_start = 20
 t_ret   = 65
-t_end   = 80
+t_end   = 100
+time_params = {'Age_born': t_start, 'Age_retire': t_ret, 'Age_death': t_end}
 
 # They assume retirement income is a fraction of labor income in the
 # last working period
@@ -116,5 +123,76 @@ ret_inc = repl_fac*f[-1]*np.ones(t_end - t_ret)
 # Get a full vector of the deterministic part of income
 det_income = np.concatenate((f, ret_inc))
 
-# Plot
-plt.plot(range(t_start,t_end+1),det_income)
+# ln Gamma_t+1 = ln f_t+1 - ln f_t
+gr_fac = np.exp(np.diff(np.log(det_income)))
+
+# %% Shocks
+
+# Transitory and permanent shock variance from the paper
+std_tran_shock = 0.0738
+std_perm_shock = 0.0106
+
+# Vectorize assuming there are no shocks in retirement
+std_tran_vec = np.concatenate((np.array([std_tran_shock]*(t_ret-t_start+1)),
+                               np.array([0]*(t_end-t_ret))))
+
+std_perm_vec = np.concatenate((np.array([std_perm_shock]*(t_ret-t_start+1)),
+                               np.array([0]*(t_end-t_ret))))
+
+# %% Financial instruments
+
+# Risk-free factor
+Rfree = 1.02
+
+# Creation of risky asset return distributions
+
+Avg = 1.06 # return factor
+Std = 0.157 # standard deviation of rate-of-return shocks
+
+RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=Avg, RiskyStd=Std) # Generates nodes for integration
+RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=Avg, RiskyStd=Std) # Generates draws from the "true" distribution
+
+
+# Make a dictionary to specify the rest of params
+dict_portfolio = { 
+                   # Usual params
+                   'CRRA': CRRA,
+                   'Rfree': Rfree,
+                   'DiscFac': DiscFac,
+                    
+                   # Life cycle
+                   'T_age' : t_end-t_start, # Time of death
+                   'T_cycle' : t_end-t_start, # Simulation timeframe
+                   'T_retire':t_ret-t_start+1,
+                   'LivPrb': survprob.tolist(),
+                   'PermGroFac': gr_fac.tolist(),
+        
+                   # Income shocks
+                   'PermShkStd': std_perm_vec,
+                   'PermShkCount': 7,
+                   'TranShkStd': std_tran_vec,
+                   'TranShkCount': 7,
+                   'UnempPrb': 0,
+                   'UnempPrbRet': 0,
+                   'IncUnemp': 0,
+                   'IncUnempRet': 0,
+                   'BoroCnstArt': 0,
+                   'tax_rate':0.0,
+                   
+                    # Portfolio related params
+                   'approxRiskyDstn': RiskyDstnFunc,
+                   'drawRiskyFunc': RiskyDrawFunc,
+                   'RiskyCount': 10,
+                   'RiskyShareCount': 30,
+                  
+                   # Grid stuff? 
+                   'aXtraMin': 0.001,
+                   'aXtraMax': 20,
+                   'aXtraCount': 48,
+                   'aXtraExtra': [None],
+                   'aXtraNestFac': 3,
+                   
+                   # General
+                   'vFuncBool': False,
+                   'CubicBool': False
+}
