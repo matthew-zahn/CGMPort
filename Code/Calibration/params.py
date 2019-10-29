@@ -116,6 +116,10 @@ repl_fac = 0.68212
 f = np.arange(t_start, t_ret+1,1)
 f = a + b1*f + b2*(f**2) + b3*(f**3)
 f = np.exp(f)
+# Since everything in HARK is in growth rates, permanent income
+# at 0 is normalized to 1.
+f = f/f[0]
+
 
 # Retirement income
 ret_inc = repl_fac*f[-1]*np.ones(t_end - t_ret)
