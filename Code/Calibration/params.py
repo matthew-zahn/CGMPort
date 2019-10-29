@@ -198,5 +198,16 @@ dict_portfolio = {
                    
                    # General
                    'vFuncBool': False,
-                   'CubicBool': False
+                   'CubicBool': False,
+                   
+                   # Simulation params
+                   'AgentCount': 5,
+                   'pLvlInitMean' : 0.0, # Mean of log initial permanent income (only matters for simulation)
+                   'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
+                   'T_sim': t_end - t_start,
+                   
+                   # Unused params required for simulation
+                   'PermGroFacAgg': 1,
+                   'aNrmInitMean': 0.0,
+                   'aNrmInitStd' : 1.0 
 }

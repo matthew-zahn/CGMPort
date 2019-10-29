@@ -29,3 +29,14 @@ for a in ages:
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.legend()
+
+# %% A Simulation
+
+agent.track_vars = ['aNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow']
+agent.initializeSim()
+agent.simulate()
+
+plt.figure()
+plt.plot(agent.t_age_hist+time_params['Age_born'], agent.pLvlNow_hist,'.')
+plt.xlabel('Age')
+plt.ylabel('Permanent income')
