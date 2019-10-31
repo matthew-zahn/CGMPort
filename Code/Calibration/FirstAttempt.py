@@ -97,10 +97,10 @@ plt.ylabel('Risky Share')
 # %% Single agent plot (to show consumption is acting weird)
 
 ind = 0
-age = agent.t_age_hist[:,ind]+age_born
-p = agent.pLvlNow_hist[:,ind]
-c = agent.cNrmNow_hist[:,ind]
-m = agent.mNrmNow_hist[:,ind]
+age = agent.t_age_hist[0:15,ind]+age_born
+p = agent.pLvlNow_hist[0:15,ind]
+c = agent.cNrmNow_hist[0:15,ind]
+m = agent.mNrmNow_hist[0:15,ind]
 
 plt.figure()
 plt.plot(age,p,'.',label = 'P')

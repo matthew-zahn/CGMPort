@@ -202,6 +202,6 @@ dict_portfolio = {
                    
                    # Unused params required for simulation
                    'PermGroFacAgg': 1,
-                   'aNrmInitMean': 0.0,
-                   'aNrmInitStd' : 1.0 
+                   'aNrmInitMean': -50.0, # Agents start with 0 assets (this is log-mean)
+                   'aNrmInitStd' : 0.0
 }
