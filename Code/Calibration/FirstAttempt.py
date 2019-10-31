@@ -28,6 +28,17 @@ for a in ages:
              agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid*np.exp(-det_income[a-age_born])),
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
+plt.ylabel('Risky portfolio share')
+plt.legend()
+
+# Plot consumption function
+plt.figure()
+for a in ages:
+    plt.plot(eevalgrid,
+             agent.solution[a-age_born].cFunc[0][0](eevalgrid*np.exp(-det_income[a-age_born])),
+             label = 'Age = %i' %(a))
+plt.xlabel('Wealth')
+plt.ylabel('Consumption')
 plt.legend()
 
 # %% A Simulation
