@@ -115,17 +115,13 @@ repl_fac = 0.68212
 # Compute average income at each point in (working) life
 f = np.arange(t_start, t_ret+1,1)
 f = a + b1*f + b2*(f**2) + b3*(f**3)
-f = np.exp(f)
-# Since everything in HARK is in growth rates, permanent income
-# at 0 is normalized to 1.
-f = f/f[0]
-
+det_work_inc = np.exp(f)
 
 # Retirement income
-ret_inc = repl_fac*f[-1]*np.ones(t_end - t_ret)
+det_ret_inc = repl_fac*det_work_inc[-1]*np.ones(t_end - t_ret)
 
 # Get a full vector of the deterministic part of income
-det_income = np.concatenate((f, ret_inc))
+det_income = np.concatenate((det_work_inc, det_ret_inc))
 
 # ln Gamma_t+1 = ln f_t+1 - ln f_t
 gr_fac = np.exp(np.diff(np.log(det_income)))
@@ -199,7 +195,7 @@ dict_portfolio = {
                    
                    # Simulation params
                    'AgentCount': 20,
-                   'pLvlInitMean' : 0.0, # Mean of log initial permanent income (only matters for simulation)
+                   'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
                    'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
                    'T_sim': t_end - t_start,
                    

@@ -25,22 +25,24 @@ ages = [20,30,55,75]
 age_born = time_params['Age_born']
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid*np.exp(-det_income[a-age_born])),
+             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/det_income[a-age_born]),
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Risky portfolio share')
 plt.legend()
+plt.grid()
 
 # Plot consumption function
 plt.figure()
 ages = [20,35,65,85]
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].cFunc[0][0](eevalgrid*np.exp(-det_income[a-age_born])),
+             agent.solution[a-age_born].cFunc[0][0](eevalgrid/det_income[a-age_born])*det_income[a-age_born],
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Consumption')
 plt.legend()
+plt.grid()
 
 # %% A Simulation
 
