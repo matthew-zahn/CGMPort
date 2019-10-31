@@ -71,7 +71,7 @@ raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
 
 Data = pd.DataFrame(raw_data)
 Data['Cons'] = Data.nrmC * Data.pIncome
-Data['M'] = Data.nrmC * Data.pIncome
+Data['M'] = Data.nrmM * Data.pIncome
 
 # Find the mean of each variable at every age
 AgeMeans = Data.groupby(['Age']).mean().reset_index()
