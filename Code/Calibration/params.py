@@ -163,6 +163,7 @@ dict_portfolio = {
                    'T_retire':t_ret-t_start,
                    'LivPrb': survprob.tolist(),
                    'PermGroFac': gr_fac.tolist(),
+                   'cycles': 1,
         
                    # Income shocks
                    'PermShkStd': std_perm_vec,

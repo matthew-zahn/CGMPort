@@ -46,7 +46,7 @@ plt.legend()
 plt.grid()
 
 # %% A Simulation
-agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow']
+agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow','mNrmNow']
 agent.initializeSim()
 agent.simulate()
 
@@ -66,10 +66,11 @@ plt.grid()
 raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
             'pIncome': agent.pLvlNow_hist.flatten(),
             'rShare': agent.RiskyShareNow_hist.flatten(),
-            'nrmAssets': agent.aNrmNow_hist.flatten(),
+            'nrmM': agent.mNrmNow_hist.flatten(),
             'nrmC': agent.cNrmNow_hist.flatten()}
 
 Data = pd.DataFrame(raw_data)
+Data['Cons'] = Data.nrmC * Data.pIncome
 
 # Find the mean of each variable at every age
 AgeMeans = Data.groupby(['Age']).mean().reset_index()
@@ -79,14 +80,30 @@ AgeMeans = Data.groupby(['Age']).mean().reset_index()
 plt.figure()
 plt.plot(AgeMeans.Age, AgeMeans.pIncome,
          label = 'Income')
-plt.plot(AgeMeans.Age, AgeMeans.nrmAssets,
-         label = 'Norm. Assets') 
+plt.plot(AgeMeans.Age, AgeMeans.nrmM,
+         label = 'Market resources') 
 plt.plot(AgeMeans.Age, AgeMeans.nrmC,
-         label = 'Norm. Consumption')
+         label = 'Consumption')
 plt.legend()
 plt.xlabel('Age')
+plt.title('Variable Means conditional on survival')
 
 plt.figure()
 plt.plot(AgeMeans.Age, AgeMeans.rShare) 
 plt.xlabel('Age')
 plt.ylabel('Risky Share')
+
+# %% Single agent plot (to show consumption is acting weird)
+
+ind = 0
+age = agent.t_age_hist[:,ind]+age_born
+p = agent.pLvlNow_hist[:,ind]
+c = agent.cNrmNow_hist[:,ind]
+m = agent.mNrmNow_hist[:,ind]
+
+plt.figure()
+plt.plot(age,p,'.',label = 'P')
+plt.plot(age,c*p,'.', label = 'C')
+plt.plot(age,m*p,'.', label = 'M')
+plt.legend()
+plt.xlabel('Age')
