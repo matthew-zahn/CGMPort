@@ -9,6 +9,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
 from params import dict_portfolio, time_params, det_income
+import pandas as pd
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
@@ -45,8 +46,7 @@ plt.legend()
 plt.grid()
 
 # %% A Simulation
-
-agent.track_vars = ['aNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow']
+agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow']
 agent.initializeSim()
 agent.simulate()
 
@@ -55,3 +55,38 @@ plt.plot(agent.t_age_hist+time_params['Age_born'], agent.pLvlNow_hist,'.')
 plt.xlabel('Age')
 plt.ylabel('Permanent income')
 plt.grid()
+
+plt.figure()
+plt.plot(agent.t_age_hist+time_params['Age_born'], agent.RiskyShareNow_hist,'.')
+plt.xlabel('Age')
+plt.ylabel('Risky share')
+plt.grid()
+
+# %% Collect results in a DataFrame
+raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
+            'pIncome': agent.pLvlNow_hist.flatten(),
+            'rShare': agent.RiskyShareNow_hist.flatten(),
+            'nrmAssets': agent.aNrmNow_hist.flatten(),
+            'nrmC': agent.cNrmNow_hist.flatten()}
+
+Data = pd.DataFrame(raw_data)
+
+# Find the mean of each variable at every age
+AgeMeans = Data.groupby(['Age']).mean().reset_index()
+
+# %% Simulation Plots
+
+plt.figure()
+plt.plot(AgeMeans.Age, AgeMeans.pIncome,
+         label = 'Income')
+plt.plot(AgeMeans.Age, AgeMeans.nrmAssets,
+         label = 'Norm. Assets') 
+plt.plot(AgeMeans.Age, AgeMeans.nrmC,
+         label = 'Norm. Consumption')
+plt.legend()
+plt.xlabel('Age')
+
+plt.figure()
+plt.plot(AgeMeans.Age, AgeMeans.rShare) 
+plt.xlabel('Age')
+plt.ylabel('Risky Share')
