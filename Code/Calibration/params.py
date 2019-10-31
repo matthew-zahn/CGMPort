@@ -136,12 +136,9 @@ gr_fac = np.exp(np.diff(np.log(det_income)))
 std_tran_shock = 0.0738
 std_perm_shock = 0.0106
 
-# Vectorize assuming there are no shocks in retirement
-std_tran_vec = np.concatenate((np.array([std_tran_shock]*(t_ret-t_start+1)),
-                               np.array([0]*(t_end-t_ret))))
-
-std_perm_vec = np.concatenate((np.array([std_perm_shock]*(t_ret-t_start+1)),
-                               np.array([0]*(t_end-t_ret))))
+# Vectorize. (HARK turns off these shocks after T_retirement)
+std_tran_vec = np.array([std_tran_shock]*(t_end-t_start))
+std_perm_vec = np.array([std_perm_shock]*(t_end-t_start))
 
 # %% Financial instruments
 
@@ -167,7 +164,7 @@ dict_portfolio = {
                    # Life cycle
                    'T_age' : t_end-t_start, # Time of death
                    'T_cycle' : t_end-t_start, # Simulation timeframe
-                   'T_retire':t_ret-t_start+1,
+                   'T_retire':t_ret-t_start,
                    'LivPrb': survprob.tolist(),
                    'PermGroFac': gr_fac.tolist(),
         
@@ -201,7 +198,7 @@ dict_portfolio = {
                    'CubicBool': False,
                    
                    # Simulation params
-                   'AgentCount': 5,
+                   'AgentCount': 20,
                    'pLvlInitMean' : 0.0, # Mean of log initial permanent income (only matters for simulation)
                    'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
                    'T_sim': t_end - t_start,
