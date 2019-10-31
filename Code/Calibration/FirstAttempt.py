@@ -71,6 +71,7 @@ raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
 
 Data = pd.DataFrame(raw_data)
 Data['Cons'] = Data.nrmC * Data.pIncome
+Data['M'] = Data.nrmC * Data.pIncome
 
 # Find the mean of each variable at every age
 AgeMeans = Data.groupby(['Age']).mean().reset_index()
@@ -80,9 +81,9 @@ AgeMeans = Data.groupby(['Age']).mean().reset_index()
 plt.figure()
 plt.plot(AgeMeans.Age, AgeMeans.pIncome,
          label = 'Income')
-plt.plot(AgeMeans.Age, AgeMeans.nrmM,
+plt.plot(AgeMeans.Age, AgeMeans.M,
          label = 'Market resources') 
-plt.plot(AgeMeans.Age, AgeMeans.nrmC,
+plt.plot(AgeMeans.Age, AgeMeans.Cons,
          label = 'Consumption')
 plt.legend()
 plt.xlabel('Age')
