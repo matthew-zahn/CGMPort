@@ -33,6 +33,7 @@ plt.legend()
 
 # Plot consumption function
 plt.figure()
+ages = [20,35,65,85]
 for a in ages:
     plt.plot(eevalgrid,
              agent.solution[a-age_born].cFunc[0][0](eevalgrid*np.exp(-det_income[a-age_born])),
