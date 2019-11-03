@@ -7,11 +7,11 @@
 # 
 # - Notebook created by Mateo Velásquez-Giraldo and Matthew Zahn.
 # 
-# This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is $PortfolioConsumerType$ class. For an introduction into this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook. 
+# This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is the $PortfolioConsumerType$ class. For an introduction to this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook. 
 # 
-# __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this conext. Original results from the paper act as placeholders for ongoing replications.
+# __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context. Original results from the paper act as placeholders for ongoing replications.
 
-# In[25]:
+# In[1]:
 
 
 # This cell does some preliminary set up
@@ -87,9 +87,9 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # | $\delta$ | Time Preference Factor | $\texttt{DiscFac}$ | 0.96 |
 # | $\gamma$ | Coeﬃcient of Relative Risk Aversion| $\texttt{CRRA}$ | 10 |
 # | $p_t$ | Survival Propility | $\texttt{LivPrb}$ | [0.6809,0.99845] |
-# | $t_0$ | Starting age | $\texttt{t_start}$ | 20 |
-# | $t_r$ | Retirement age | $\texttt{t_ret}$ | 65 |
-# | $t_{max}$ | Maximum age | $\texttt{t_end}$ | 100 |
+# | $t_0$ | Starting Age | $\texttt{t_start}$ | 20 |
+# | $t_r$ | Retirement Age | $\texttt{t_ret}$ | 65 |
+# | $T$ | Maximum Age | $\texttt{t_end}$ | 100 |
 # 
 # __2. Income process and the finanical assets__
 # 
@@ -97,7 +97,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # |:---:| ---         | ---  | :---: |
 # | $f(t,Z_{i,t})$| Average income at each stage of life | $\texttt{det_income}$ | $ \exp(0.530339 + 0.16818 t + (0.0323371/10) t^2 + (0.0019704/100) t^3)$ |
 # | $\lambda$ | Last Period Labor Income Share for Retirement | $\texttt{repl_fac}$ | 0.68212 |
-# | $\log \Gamma$ | Permanent Income Growth Factor | $\texttt{PermGroFac}$ | $\{\log f_{t+1} - \log f_t\}$ |
+# | $\log \Gamma$ | Permanent Income Growth Factor | $\texttt{PermGroFac}$ | $\{\log f_{t+1} - \log f_t\}^{t_r+1}_{t=20}$ |
 # | $\mathsf{R}$ | Interest Factor | $\texttt{Rfree}$ | 1.02 |
 # | $\mu$ | Average Stock Return | $\texttt{RiskyDstnFunc}$ \& $\texttt{RiskyDrawFunc}$ | 1.06 |
 # | $\sigma_\eta$ | Std Dev of Stock Returns | $\texttt{RiskyDstnFunc}$ \& $\texttt{RiskyDrawFunc}$ | 0.157 |
@@ -110,271 +110,25 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # | $\sigma_v$ | Std Dev of Log Permanent Shock| $\texttt{PermShkStd}$ | 0.0106 |
 # | $\sigma_\epsilon$ | Std Dev of Log Transitory Shock| $\texttt{TranShkStd}$ | 0.0738 |
 # 
+# 
+# For reference, the authors' source Fortran code that includes these paramerization details is available on [Gomes' personal page](http://faculty.london.edu/fgomes/research.html). Code that solves the model is also available in [Julia](https://github.com/econ-ark/HARK/issues/114#issuecomment-371891418).
 
-# In[8]:
+# In[2]:
 
 
 # Calibrate the model in line with the information above
-
-# %% Preferences
-
-# Relative risk aversion
-CRRA = 10
-# Discount factor
-DiscFac = 0.96
-
-# Survival probabilities from the author's Fortran code
-n = 80
-survprob = np.zeros(n+1)
-survprob[1] = 0.99845
-survprob[2] = 0.99839
-survprob[3] = 0.99833
-survprob[4] = 0.9983
-survprob[5] = 0.99827
-survprob[6] = 0.99826
-survprob[7] = 0.99824
-survprob[8] = 0.9982
-survprob[9] = 0.99813
-survprob[10] = 0.99804
-survprob[11] = 0.99795
-survprob[12] = 0.99785
-survprob[13] = 0.99776
-survprob[14] = 0.99766
-survprob[15] = 0.99755
-survprob[16] = 0.99743
-survprob[17] = 0.9973
-survprob[18] = 0.99718
-survprob[19] = 0.99707
-survprob[20] = 0.99696
-survprob[21] = 0.99685
-survprob[22] = 0.99672
-survprob[23] = 0.99656
-survprob[24] = 0.99635
-survprob[25] = 0.9961
-survprob[26] = 0.99579
-survprob[27] = 0.99543
-survprob[28] = 0.99504
-survprob[29] = 0.99463
-survprob[30] = 0.9942
-survprob[31] = 0.9937
-survprob[32] = 0.99311
-survprob[33] = 0.99245
-survprob[34] = 0.99172
-survprob[35] = 0.99091
-survprob[36] = 0.99005
-survprob[37] = 0.98911
-survprob[38] = 0.98803
-survprob[39] = 0.9868
-survprob[40] = 0.98545
-survprob[41] = 0.98409
-survprob[42] = 0.9827
-survprob[43] = 0.98123
-survprob[44] = 0.97961
-survprob[45] = 0.97786
-survprob[46] = 0.97603
-survprob[47] = 0.97414
-survprob[48] = 0.97207
-survprob[49] = 0.9697
-survprob[50] = 0.96699
-survprob[51] = 0.96393
-survprob[52] = 0.96055
-survprob[53] = 0.9569
-survprob[54] = 0.9531
-survprob[55] = 0.94921
-survprob[56] = 0.94508
-survprob[57] = 0.94057
-survprob[58] = 0.9357
-survprob[59] = 0.93031
-survprob[60] = 0.92424
-survprob[61] = 0.91717
-survprob[62] = 0.90922
-survprob[63] = 0.90089
-survprob[64] = 0.89282
-survprob[65] = 0.88503
-survprob[66] = 0.87622
-survprob[67] = 0.86576
-survprob[68] = 0.8544
-survprob[69] = 0.8423
-survprob[70] = 0.82942
-survprob[71] = 0.8154
-survprob[72] = 0.80002
-survprob[73] = 0.78404
-survprob[74] = 0.76842
-survprob[75] = 0.75382
-survprob[76] = 0.73996
-survprob[77] = 0.72464
-survprob[78] = 0.71057
-survprob[79] = 0.6961
-survprob[80] = 0.6809
-
-# Fix indexing problem (fortran starts at 1, python at 0)
-survprob = np.delete(survprob, [0,1])
-
-# Labor income
-
-# They assume its a polinomial of age. Here are the coefficients
-a=-2.170042+2.700381
-b1=0.16818
-b2=-0.0323371/10
-b3=0.0019704/100
-
-t_start = 20
-t_ret   = 65
-t_end   = 100
-time_params = {'Age_born': t_start, 'Age_retire': t_ret, 'Age_death': t_end}
-
-# They assume retirement income is a fraction of labor income in the
-# last working period
-repl_fac = 0.68212
-
-# Compute average income at each point in (working) life
-f = np.arange(t_start, t_ret+1,1)
-f = a + b1*f + b2*(f**2) + b3*(f**3)
-det_work_inc = np.exp(f)
-
-# Retirement income
-det_ret_inc = repl_fac*det_work_inc[-1]*np.ones(t_end - t_ret)
-
-# Get a full vector of the deterministic part of income
-det_income = np.concatenate((det_work_inc, det_ret_inc))
-
-# ln Gamma_t+1 = ln f_t+1 - ln f_t
-gr_fac = np.exp(np.diff(np.log(det_income)))
-
-# %% Shocks
-
-# Transitory and permanent shock variance from the paper
-std_tran_shock = 0.0738
-std_perm_shock = 0.0106
-
-# Vectorize. (HARK turns off these shocks after T_retirement)
-std_tran_vec = np.array([std_tran_shock]*(t_end-t_start))
-std_perm_vec = np.array([std_perm_shock]*(t_end-t_start))
-
-# %% Financial instruments
-
-# Risk-free factor
-Rfree = 1.02
-
-# Creation of risky asset return distributions
-
-Avg = 1.06 # return factor
-Std = 0.157 # standard deviation of rate-of-return shocks
-
-RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=Avg, RiskyStd=Std) # Generates nodes for integration
-RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=Avg, RiskyStd=Std) # Generates draws from the "true" distribution
+import sys,os
+sys.path.append(os.path.realpath('../Code/Calibration'))
+from params import dict_portfolio, time_params, det_income # Note can manually copy this script into this cell if desired.
 
 
-# Make a dictionary to specify the rest of params
-dict_portfolio = { 
-                   # Usual params
-                   'CRRA': CRRA,
-                   'Rfree': Rfree,
-                   'DiscFac': DiscFac,
-                    
-                   # Life cycle
-                   'T_age' : t_end-t_start, # Time of death
-                   'T_cycle' : t_end-t_start, # Simulation timeframe
-                   'T_retire':t_ret-t_start,
-                   'LivPrb': survprob.tolist(),
-                   'PermGroFac': gr_fac.tolist(),
-                   'cycles': 1,
-        
-                   # Income shocks
-                   'PermShkStd': std_perm_vec,
-                   'PermShkCount': 7,
-                   'TranShkStd': std_tran_vec,
-                   'TranShkCount': 7,
-                   'UnempPrb': 0,
-                   'UnempPrbRet': 0,
-                   'IncUnemp': 0,
-                   'IncUnempRet': 0,
-                   'BoroCnstArt': 0,
-                   'tax_rate':0.0,
-                   
-                    # Portfolio related params
-                   'approxRiskyDstn': RiskyDstnFunc,
-                   'drawRiskyFunc': RiskyDrawFunc,
-                   'RiskyCount': 10,
-                   'RiskyShareCount': 30,
-                  
-                   # Grid stuff? 
-                   'aXtraMin': 0.001,
-                   'aXtraMax': 20,
-                   'aXtraCount': 48,
-                   'aXtraExtra': [None],
-                   'aXtraNestFac': 3,
-                   
-                   # General
-                   'vFuncBool': False,
-                   'CubicBool': False,
-                   
-                   # Simulation params
-                   'AgentCount': 100,
-                   'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
-                   'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
-                   'T_sim': t_end - t_start,
-                   
-                   # Unused params required for simulation
-                   'PermGroFacAgg': 1,
-                   'aNrmInitMean': -50.0, # Agents start with 0 assets (this is log-mean)
-                   'aNrmInitStd' : 0.0
-}
-
-
-# In[9]:
+# In[3]:
 
 
 # Solve the model with the given parameters
-
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
-
-# ### Calibration&mdash;Details
-# 
-# __Labor income process__
-# 
-# The PSID is used to estimate the labor income equation and its permanent component. This estimation controls for family specific fixed effects. In order to control for education, the sample was split into three groups: no high school, high school but no college degree, and college graduates. Across each of these groups, $f(t,Z_{i,t})$ is assumed to be additively separable across its arguments. The vector of personal characteristics $Z_{i,t}$ includes age, household fixed effects, marital status, household size/composition. The sample uses households that have a head between the age of 20 and 65. For the retirement stage, $\lambda$ is calibrated as the ratio of the average of labor income in a given education group to the average labor income in the last year of work before retirement. 
-# 
-# The error structure of the labor income process is estimated by following the variance decomposition method described in Carroll and Samwick (1997). A similar method is used to estimate the correlation parameter $\rho$. Define $r_{i,d}$ as:
-# 
-# \begin{eqnarray*}
-# r_{id} \equiv \log(Y^*_{i,t+d}) - \log(Y^*_{i,t}), \text{ }d\in \{1,2,...,22\}. \\
-# \end{eqnarray*}
-# 
-# Where $Y^*_t$,
-# \begin{eqnarray*}
-# \log(Y^*_{i,t}) \equiv \log(Y_{i,t}) - f(t,Z_{i,t}).
-# \end{eqnarray*}
-# Then,
-# \begin{eqnarray*}
-# \text{VAR}(R_{i,d}) = d*\sigma^2_u + 2*\sigma^2_\epsilon.
-# \end{eqnarray*}
-# 
-# The variance estimates can be obtained via an OLS regression of $\text{VAR}(R_{i,d})$ on $d$ and a constant term. These estimated values are assumed to be the same across all individuals. For the correlation parameter, start by writing the change in $\log(Y_{i,t})$ as:
-# 
-# \begin{eqnarray*}
-# r_{i,1} = \xi_t + \omega_{i,t} + \epsilon_{i,t} - \epsilon_{i,t-1}
-# \end{eqnarray*}
-# 
-# Averaging across individuals gives:
-# 
-# \begin{eqnarray*}
-# \bar{r_1} = \xi_t
-# \end{eqnarray*}
-# 
-# The correlation coefficient is also obtained via OLS by regressing $\overline{\Delta \log(Y^*_t)}$ on demeaned excess returns:
-# 
-# \begin{eqnarray*}
-# \bar{r_1} = \beta(R_{t+1} - \bf{\bar{R}}_f - \mu) + \psi_t
-# \end{eqnarray*}
-# 
-# __Other parameters__
-# 
-# Adults start at age 20 without a college degree and age 22 with a college degree. The retirement age is 65 for all households. The investor will die for sure if they reach age 100. Prior to this age, survival probabilities come from the mortality tables published by the National Center for Health Statistics. The discount factor $\delta$ is calibrated to be $0.96$ and the coefficient of relative risk aversion ($\gamma$) is set to $10$. The mean equity premium $\mu$ is $6%$, the risk free rate is $2%$, and the standard deviation of innovations to the risky asset is set to the historical value of $0.157$.
-# 
-# For reference, the authors' source Fortran code that includes these paramerization details is available on [Gomes' personal page](http://faculty.london.edu/fgomes/research.html). Code that solves the model is also available in [Julia](https://github.com/econ-ark/HARK/issues/114#issuecomment-371891418).
 
 # ### Key Results
 # 
@@ -386,7 +140,7 @@ agent.solve()
 # 
 # Analyzing the policy rule by age also shows that the risky share increases from young to middle age, and decreases from middle to old age. This is consistent with the previous interpretation: shares trace the humped shape of labor earnings.
 
-# In[17]:
+# In[4]:
 
 
 # Plot portfolio rule
@@ -415,7 +169,7 @@ plt.grid()
 # 
 # At all age levels consumption increases with wealth. In the first phase of life (until approximately 35 to 40) the consumption function shifts upward as the agent ages, driven by permanent income increases. As the agent gets closer to retirement, their labor income profile becomes negatively sloped causing declines in consumption at some wealth levels. 
 
-# In[18]:
+# In[5]:
 
 
 # Plot consumption function
@@ -438,7 +192,7 @@ plt.grid()
 # 
 # The figures below show simulated levels of permanent income and risky portfolio shares for 100 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 20% once they reach retirement. 
 
-# In[19]:
+# In[6]:
 
 
 # %% A Simulation
@@ -460,11 +214,9 @@ plt.ylabel('Risky share')
 plt.grid()
 
 
-# The plots below show the average variable values across all of the simulated agents. 
-# 
-# __[[Place holder for more discussion based on HARK updates.]]__
+# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. __[[Agents appear to be earning too much market resources at the moment. Place holder for updated results and discussion based on updates to HARK toolkit.]]__
 
-# In[14]:
+# In[9]:
 
 
 # %% Collect results in a DataFrame
@@ -492,7 +244,7 @@ plt.plot(AgeMeans.Age, AgeMeans.Cons,
          label = 'Consumption')
 plt.legend()
 plt.xlabel('Age')
-plt.title('Variable Means conditional on survival')
+plt.title('Variable Means Conditional on Survival')
 
 plt.figure()
 plt.plot(AgeMeans.Age, AgeMeans.rShare) 
@@ -502,7 +254,7 @@ plt.ylabel('Risky Share')
 
 # The plot below illustrates the dynamics of permanent income, consumption, and market resources for a single agent. This plot highlights some unusual consumption dynamics as well as the beginning of sharp increase in market resources. 
 
-# In[23]:
+# In[11]:
 
 
 # %% Single agent plot (to show consumption is acting weird)
@@ -514,9 +266,9 @@ c = agent.cNrmNow_hist[0:15,ind]
 m = agent.mNrmNow_hist[0:15,ind]
 
 plt.figure()
-plt.plot(age,p,'.',label = 'P')
-plt.plot(age,c*p,'.', label = 'C')
-plt.plot(age,m*p,'.', label = 'M')
+plt.plot(age,p,'.',label = 'Income')
+plt.plot(age,m*p,'.', label = 'Market Resources')
+plt.plot(age,c*p,'.', label = 'Consumption')
 plt.legend()
 plt.xlabel('Age')
 
