@@ -11,7 +11,7 @@
 # 
 # __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context. Original results from the paper act as placeholders for ongoing replications.
 
-# In[1]:
+# In[2]:
 
 
 # This cell does some preliminary set up
@@ -95,7 +95,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # 
 # | Parameter | Description | Code | Value|
 # |:---:| ---         | ---  | :---: |
-# | $f(t,Z_{i,t})$| Average income at each stage of life | $\texttt{det_income}$ | $ \exp(0.530339 + 0.16818 t + (0.0323371/10) t^2 + (0.0019704/100) t^3)$ |
+# | $f(t,Z_{i,t})$| Average income at each stage of life | $\texttt{det_income}$ | $ \exp($0.530339 + 0.16818 $t$+ (0.0323371/10) $t^2$ + (0.0019704/100) $t^3)$ |
 # | $\lambda$ | Last Period Labor Income Share for Retirement | $\texttt{repl_fac}$ | 0.68212 |
 # | $\log \Gamma$ | Permanent Income Growth Factor | $\texttt{PermGroFac}$ | $\{\log f_{t+1} - \log f_t\}^{t_r+1}_{t=20}$ |
 # | $\mathsf{R}$ | Interest Factor | $\texttt{Rfree}$ | 1.02 |
