@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.3
+#       jupytext_version: 1.2.4
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -21,7 +21,7 @@
 #
 #  - Notebook created by Mateo Velásquez-Giraldo and Matthew Zahn.
 #
-#  This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is the $PortfolioConsumerType$ class. For an introduction to this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook.
+#  This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is the $\texttt{PortfolioConsumerType}$ class. For an introduction to this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook.
 #
 #  __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context. Original results from the paper act as placeholders for ongoing replications.
 
@@ -128,8 +128,8 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # %%
 # Calibrate the model in line with the information above
 import sys,os
-sys.path.append(os.path.realpath('../Code/Calibration'))
-from params import dict_portfolio, time_params, det_income # Note can manually copy this script into this cell if desired.
+sys.path.append(os.path.realpath('../Code/Calibration')) # [[Explain what this does]]
+from params import dict_portfolio, time_params, det_income
 
 
 # %%
@@ -147,6 +147,8 @@ agent.solve()
 # The optimal risky share is decreasing in wealth. The authors argue this is due to the fact that, at low levels of wealth, relatively safe human wealth represents a higher fraction of the consumer's wealth, so he shifts his tradeable wealth towards riskier alternatives.
 #
 # Analyzing the policy rule by age also shows that the risky share increases from young to middle age, and decreases from middle to old age. This is consistent with the previous interpretation: shares trace the humped shape of labor earnings.
+#
+# __[[Discuss how close these are to the paper and discuss differences.]]__
 
 # %%
 # Plot portfolio rule
@@ -295,3 +297,23 @@ plt.xlabel('Age')
 # ### Conclusion
 #
 # This article provides a dynamic model with accurate lifetime income profiles in which labor income increases risky asset holdings, as it is seen as a closer substitute of risk-free assets. It finds an optimal risky asset share that decreases in wealth and with age, after middle age. The model is also used to show that ignoring labor income for portfolio allocation can generate substantial welfare losses.
+
+# %%
+### Bibtex entry
+'''
+@article{10.1093/rfs/hhi017,
+    author = {Cocco, João F. and Gomes, Francisco J. and Maenhout, Pascal J.},
+    title = "{Consumption and Portfolio Choice over the Life Cycle}",
+    journal = {The Review of Financial Studies},
+    volume = {18},
+    number = {2},
+    pages = {491-533},
+    year = {2005},
+    month = {02},
+    abstract = "{This article solves a realistically calibrated life cycle model of consumption and portfolio choice with non-tradable labor income and borrowing constraints. Since labor income substitutes for riskless asset holdings, the optimal share invested in equities is roughly decreasing over life. We compute a measure of the importance of human capital for investment behavior. We find that ignoring labor income generates large utility costs, while the cost of ignoring only its risk is an order of magnitude smaller, except when we allow for a disastrous labor income shock. Moreover, we study the implications of introducing endogenous borrowing constraints in this incomplete-markets setting.}",
+    issn = {0893-9454},
+    doi = {10.1093/rfs/hhi017},
+    url = {https://doi.org/10.1093/rfs/hhi017},
+    eprint = {http://oup.prod.sis.lan/rfs/article-pdf/18/2/491/24421441/hhi017.pdf},
+}
+'''
