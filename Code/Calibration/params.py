@@ -1,6 +1,7 @@
 import numpy as np
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
-
+from HARK.simulation import drawNormal
+from HARK.utilities import approxNormal
 # %% Preferences
 
 # Relative risk aversion
@@ -143,12 +144,12 @@ Rfree = 1.02
 
 # Creation of risky asset return distributions
 
-Avg = 1.06 # return factor
+Mu = 0.06 # Equity premium
 Std = 0.157 # standard deviation of rate-of-return shocks
 
-RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=Avg, RiskyStd=Std) # Generates nodes for integration
-RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=Avg, RiskyStd=Std) # Generates draws from the "true" distribution
-
+# Normal Risky Rate test
+RiskyDstnFunc = lambda count: approxNormal(count, mu = Mu + Rfree, sigma = Std)
+RiskyDrawFunc = lambda: drawNormal(1, mu = Mu + Rfree, sigma = Std)
 
 # Make a dictionary to specify the rest of params
 dict_portfolio = { 
