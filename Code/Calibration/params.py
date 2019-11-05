@@ -129,8 +129,8 @@ gr_fac = np.exp(np.diff(np.log(det_income)))
 # %% Shocks
 
 # Transitory and permanent shock variance from the paper
-std_tran_shock = sqrt(0.0738)
-std_perm_shock = sqrt(0.0106)
+std_tran_shock = np.sqrt(0.0738)
+std_perm_shock = np.sqrt(0.0106)
 
 # Vectorize. (HARK turns off these shocks after T_retirement)
 std_tran_vec = np.array([std_tran_shock]*(t_end-t_start))
@@ -195,7 +195,7 @@ dict_portfolio = {
                    'CubicBool': False,
                    
                    # Simulation params
-                   'AgentCount': 100,
+                   'AgentCount': 10,
                    'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
                    'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
                    'T_sim': t_end - t_start,
