@@ -359,6 +359,7 @@ plt.xlabel('Age')
 # ### Puzzles/ Questions
 #
 # - Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
+# - The authors report taking the normalization $v_{i,t} = 1$. However the ranges of their results seem more consistent with $v_{i,t} = 0$ so that $\exp (v_{i,t}) = 1$, which also makes more sense for interpretation.
 #
 
 # %%
