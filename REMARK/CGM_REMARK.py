@@ -73,9 +73,39 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 #
 # in which the innovation is decomposed into an aggregate ($\xi_t$) and an idiosyncratic component ($\omega_{i,t}$), both following mean-0 normal distributions.
 #
-# Post-retirement income is a constant fraction $\lambda$ of income in the last working year $K$.
+# Post-retirement income is a constant fraction $\lambda$ of permanent income in the last working year $K$.
 #
 # A crucial aspect of the labor income process is that $f(\cdot,\cdot)$ is calibrated to match income profiles in the PSID, capturing the usual humped shape of income across lifetime.
+#
+# #### Matching labor income in HARK
+#
+# In HARK's consumption-saving models, the income process takes the form
+# \begin{equation}
+#     \ln Y_t = \ln P_t + \ln \theta_t
+# \end{equation}
+# where $P_t$ represents permanent income and $\ln \theta_t \sim N(0,\sigma_\theta)$ transitory shocks to income. Permanent income evolves according to
+# \begin{equation}
+#     \ln P_{t+1} = \ln \Gamma_{t+1} +  \ln \psi_{t+1} + \ln P_t
+# \end{equation}
+# where $\Gamma_{t+1}$ is a deterministic growth factor, and $\ln \psi_{t+1} \sim N(0,\sigma_\psi)$ a permanent income shock. 
+#
+#
+# To represent the author's assumptions in HARK, we express both income processes as sums of deterministic components and i.i.d shocks
+# \begin{align}
+# \text{Cocco et. al} &\quad& \ln Y_{i,t} &=& f(t,Z_{i,t}) + v_{i,0} &+&\sum_{k=1}^t u_{i,k} &+&\qquad \varepsilon_{i,t} \\
+# \text{HARK}        &\quad& \ln Y_{i,t} &=& \ln P_{i,0} + \sum_{k=1}^t \ln \Gamma_k &+&\sum_{k=1}^t \ln \psi_{i,k} &+& \qquad \ln \theta_{i,t}.
+# \end{align}
+#
+# These representations make evident the mapping that we use
+#
+# |HARK | Cocco et. al |
+# | :---: | :-----------: |
+# | $P_{i,0}$ | $f(0,Z_{i,0})$ + $v_{i,0}$ |
+# | $\ln$ $\Gamma_{t+1}$| $f(t+1$, $Z_{i,t+1})$ - $f(t,Z_{i,t})$|
+# |$\ln$ $\psi_{i,k}$| $u_{i,k}$|
+# |$\ln$ $\theta_{i,t}$| $\varepsilon_{i,t}$|
+#
+# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda}$ and $\Gamma_{t} = 1 \quad \forall t>K+1$
 #
 # #### Assets and their returns
 #
