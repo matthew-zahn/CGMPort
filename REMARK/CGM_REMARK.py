@@ -105,7 +105,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # |$\ln$ $\psi_{i,k}$| $u_{i,k}$|
 # |$\ln$ $\theta_{i,t}$| $\varepsilon_{i,t}$|
 #
-# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda}$ and $\Gamma_{t} = 1 \quad \forall t>K+1$
+# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda$ and $\Gamma_{t} = 1 \quad \forall t>K+1$.
 #
 # #### Assets and their returns
 #
