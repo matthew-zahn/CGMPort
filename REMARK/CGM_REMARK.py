@@ -190,6 +190,10 @@ agent.solve()
 # \tilde{X_{i,t}} = \hat{X_{i,t}} \times \exp (f(t,Z_{i,t})+1)
 # \end{equation}
 
+# %%
+# Define a normalization factor
+norm_factor = det_income*np.exp(1)
+
 # %% [markdown]
 # ### Key Results
 #
@@ -215,7 +219,7 @@ ages = [20,30,55,75]
 age_born = time_params['Age_born']
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/det_income[a-age_born]),
+             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[a-age_born]),
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Risky portfolio share')
@@ -236,7 +240,7 @@ plt.figure()
 ages = [20,35,65,85]
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].cFunc[0][0](eevalgrid/det_income[a-age_born])*det_income[a-age_born],
+             agent.solution[a-age_born].cFunc[0][0](eevalgrid/norm_factor[a-age_born])*norm_factor[a-age_born],
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Consumption')
