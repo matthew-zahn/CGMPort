@@ -105,7 +105,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # |$\ln$ $\psi_{i,k}$| $u_{i,k}$|
 # |$\ln$ $\theta_{i,t}$| $\varepsilon_{i,t}$|
 #
-# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda$ and $\Gamma_{t} = 1 \quad \forall t>K+1$.
+# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda$ and $\Gamma_{t} = 1$ $\forall t>K+1$.
 #
 # #### Assets and their returns
 #
@@ -327,6 +327,12 @@ plt.xlabel('Age')
 # ### Conclusion
 #
 # This article provides a dynamic model with accurate lifetime income profiles in which labor income increases risky asset holdings, as it is seen as a closer substitute of risk-free assets. It finds an optimal risky asset share that decreases in wealth and with age, after middle age. The model is also used to show that ignoring labor income for portfolio allocation can generate substantial welfare losses.
+
+# %% [markdown]
+# ### Puzzles/ Questions
+#
+# - Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
+#
 
 # %%
 ### Bibtex entry
