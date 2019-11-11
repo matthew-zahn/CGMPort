@@ -149,7 +149,8 @@ Std = 0.157 # standard deviation of rate-of-return shocks
 
 # Normal Risky Rate test
 RiskyDstnFunc = lambda count: approxNormal(count, mu = Mu + Rfree, sigma = Std)
-RiskyDrawFunc = lambda: drawNormal(1, mu = Mu + Rfree, sigma = Std)
+RiskyDrawFunc = lambda rngSeed: drawNormal(1, mu = Mu + Rfree, sigma = Std,
+                                           seed = rngSeed)
 
 # Make a dictionary to specify the rest of params
 dict_portfolio = { 
