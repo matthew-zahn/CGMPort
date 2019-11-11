@@ -73,9 +73,39 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 #
 # in which the innovation is decomposed into an aggregate ($\xi_t$) and an idiosyncratic component ($\omega_{i,t}$), both following mean-0 normal distributions.
 #
-# Post-retirement income is a constant fraction $\lambda$ of income in the last working year $K$.
+# Post-retirement income is a constant fraction $\lambda$ of permanent income in the last working year $K$.
 #
 # A crucial aspect of the labor income process is that $f(\cdot,\cdot)$ is calibrated to match income profiles in the PSID, capturing the usual humped shape of income across lifetime.
+#
+# #### Matching labor income in HARK
+#
+# In HARK's consumption-saving models, the income process takes the form
+# \begin{equation}
+#     \ln Y_t = \ln P_t + \ln \theta_t
+# \end{equation}
+# where $P_t$ represents permanent income and $\ln \theta_t \sim N(0,\sigma_\theta)$ transitory shocks to income. Permanent income evolves according to
+# \begin{equation}
+#     \ln P_{t+1} = \ln \Gamma_{t+1} +  \ln \psi_{t+1} + \ln P_t
+# \end{equation}
+# where $\Gamma_{t+1}$ is a deterministic growth factor, and $\ln \psi_{t+1} \sim N(0,\sigma_\psi)$ a permanent income shock. 
+#
+#
+# To represent the author's assumptions in HARK, we express both income processes as sums of deterministic components and i.i.d shocks
+# \begin{align}
+# \text{Cocco et. al} &\quad& \ln Y_{i,t} &=& f(t,Z_{i,t}) + v_{i,0} &+&\sum_{k=1}^t u_{i,k} &+&\qquad \varepsilon_{i,t} \\
+# \text{HARK}        &\quad& \ln Y_{i,t} &=& \ln P_{i,0} + \sum_{k=1}^t \ln \Gamma_k &+&\sum_{k=1}^t \ln \psi_{i,k} &+& \qquad \ln \theta_{i,t}.
+# \end{align}
+#
+# These representations make evident the mapping that we use
+#
+# |HARK | Cocco et. al |
+# | :---: | :-----------: |
+# | $P_{i,0}$ | $f(0,Z_{i,0})$ + $v_{i,0}$ |
+# | $\ln$ $\Gamma_{t+1}$| $f(t+1$, $Z_{i,t+1})$ - $f(t,Z_{i,t})$|
+# |$\ln$ $\psi_{i,k}$| $u_{i,k}$|
+# |$\ln$ $\theta_{i,t}$| $\varepsilon_{i,t}$|
+#
+# and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda$ and $\Gamma_{t} = 1$ $\forall t>K+1$.
 #
 # #### Assets and their returns
 #
@@ -138,6 +168,33 @@ agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
 # %% [markdown]
+# ### A note on normalization
+#
+# The problem as specified above makes the value function homogeneous with respect to permanent labor income. This is convenient as it allows for a re-statement of the problem in variables that are normalized by permanent income or its random components, eliminating a state variable.
+#
+# The authors report (page 497) taking the normalization $v_{i,t} = 1$. This amounts to defining normalized variables $\tilde{\cdot}$ as the original variable divided by $e^{v_{i,t}-1}$. For instance:
+#
+# \begin{equation}
+# \tilde{Y_{i,t}} = \frac{Y_{i,t}}{\exp(v_{i,t}-1)} = \frac{\exp (f(t,Z_{i,t}) + v_{i,t} + \varepsilon_{i,t})}{\exp(v_{i,t}-1)} = \exp( f(t,Z_{i,t}) + 1 + \varepsilon_{i,t} )
+# \end{equation}
+#
+# These normalized variables have the convenient interpretation of the state that things would be in if, it weren't for permanent shocks. The author's depictions of policy functions are presented in terms of these normalized variables.
+#
+# On the other hand, HARK normalizes the problem by total permanent income $P_t = \exp (f(t,Z_{i,t}) + v_{i,t})$ and its solution objects are therefore in terms of normalized variables $\hat{\cdot}$, defined as
+# \begin{equation}
+# \hat{X_{i,t}} = \frac{X_{i,t}}{P_{i,t}} = \frac{X_{i,t}}{\exp (f(t,Z_{i,t}) + v_{i,t})}.
+# \end{equation}
+#
+# Therefore, to present our results in a way consistent with that of the original authors, we use the following relationship
+# \begin{equation}
+# \tilde{X_{i,t}} = \hat{X_{i,t}} \times \exp (f(t,Z_{i,t})+1)
+# \end{equation}
+
+# %%
+# Define a normalization factor
+norm_factor = det_income*np.exp(1)
+
+# %% [markdown]
 # ### Key Results
 #
 # #### The optimal risky asset share
@@ -162,7 +219,7 @@ ages = [20,30,55,75]
 age_born = time_params['Age_born']
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/det_income[a-age_born]),
+             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[a-age_born]),
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Risky portfolio share')
@@ -183,7 +240,7 @@ plt.figure()
 ages = [20,35,65,85]
 for a in ages:
     plt.plot(eevalgrid,
-             agent.solution[a-age_born].cFunc[0][0](eevalgrid/det_income[a-age_born])*det_income[a-age_born],
+             agent.solution[a-age_born].cFunc[0][0](eevalgrid/norm_factor[a-age_born])*norm_factor[a-age_born],
              label = 'Age = %i' %(a))
 plt.xlabel('Wealth')
 plt.ylabel('Consumption')
@@ -297,6 +354,13 @@ plt.xlabel('Age')
 # ### Conclusion
 #
 # This article provides a dynamic model with accurate lifetime income profiles in which labor income increases risky asset holdings, as it is seen as a closer substitute of risk-free assets. It finds an optimal risky asset share that decreases in wealth and with age, after middle age. The model is also used to show that ignoring labor income for portfolio allocation can generate substantial welfare losses.
+
+# %% [markdown]
+# ### Puzzles/ Questions
+#
+# - Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
+# - The authors report taking the normalization $v_{i,t} = 1$. However the ranges of their results seem more consistent with $v_{i,t} = 0$ so that $\exp (v_{i,t}) = 1$, which also makes more sense for interpretation.
+#
 
 # %%
 ### Bibtex entry
