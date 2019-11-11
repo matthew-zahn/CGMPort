@@ -48,7 +48,8 @@ plt.legend()
 plt.grid()
 
 # %% A Simulation
-agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow','mNrmNow']
+agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow',
+                    'mNrmNow','RiskyNow']
 agent.initializeSim()
 agent.simulate()
 
@@ -69,7 +70,8 @@ raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
             'pIncome': agent.pLvlNow_hist.flatten(),
             'rShare': agent.RiskyShareNow_hist.flatten(),
             'nrmM': agent.mNrmNow_hist.flatten(),
-            'nrmC': agent.cNrmNow_hist.flatten()}
+            'nrmC': agent.cNrmNow_hist.flatten(),
+            'RiskyRet': agent.RiskyNow_hist.flatten()}
 
 Data = pd.DataFrame(raw_data)
 Data['Cons'] = Data.nrmC * Data.pIncome

@@ -197,10 +197,10 @@ dict_portfolio = {
                    'CubicBool': False,
                    
                    # Simulation params
-                   'AgentCount': 10,
+                   'AgentCount': 50,
                    'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
                    'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
-                   'T_sim': t_end - t_start,
+                   'T_sim': (t_end - t_start)*10,
                    
                    # Unused params required for simulation
                    'PermGroFacAgg': 1,
