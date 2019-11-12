@@ -6,6 +6,7 @@
 
 
 using Interpolations
+using LinearAlgebra
 
 # utility functions and related
 utility(c::T1,gamma::T2) where {T1,T2<:Real} = (c^(1.0-gamma))/(1.0-gamma)
@@ -13,7 +14,7 @@ uprime(c::T1,gamma::T2) where {T1,T2<:Real} = c^(-gamma)
 uprimeinv(c::T1,gamma::T2) where {T1,T2<:Real} = c^(-1.0/gamma)
 
 # find a number in a grid
-ntoi(x::Number,g::AbstractArray) = convert(Int,round((clamp(x,g[1],g[end]) - g[1])/step(g) + 1)) 
+ntoi(x::Number,g::AbstractArray) = convert(Int,round((clamp(x,g[1],g[end]) - g[1])/step(g) + 1))
 #ntoi(x::Number,g::AbstractArray) = max(searchsortedlast(g,x),1) #equivalent to above, but works with non-Range types
 
 # parameters and such
@@ -39,7 +40,7 @@ const weig = [1/6; 2/3; 1/6]
 const grid = [-sqrt(3); 0.0; sqrt(3)]
 
 # SURVIVAL PROBABILITIES
-survprob = Vector{Float64}(80)
+survprob = Vector{Float64}(undef,80)
 survprob[1] = 0.99845
 survprob[2] = 0.99839
 survprob[3] = 0.99833
@@ -136,18 +137,18 @@ const expeyp = exp.(eyp)
 
 
 
-const galfa = linspace(0.0,1.0,nalfa)
-const gret = mu + gr
-const gs = range(0.05,0.5,ns) # gs now represents how much savings
+const galfa = range(0.0,1.0,length = nalfa)
+const gret = mu .+ gr
+const gs = range(0.05,0.5, length = ns) # gs now represents how much savings
 
 
 # average and transitory income pieces
 const f_y = zeros(nqp,tr-1)
 for t = (tb+1):tr
-   avg = exp(vecdot(ageprof,[1.0; t; t^2; t^3]))
+   avg = exp(dot(ageprof,[1.0; t; t^2; t^3]))
    f_y[:,t-tb] = avg*exp.(eyt)
 end
-const ret_y= ret_fac*exp(vecdot(ageprof,[1.0; tr; tr^2; tr^3]))
+const ret_y= ret_fac*exp(dot(ageprof,[1.0; tr; tr^2; tr^3]))
 
 
 # terminal/starter values
@@ -188,7 +189,7 @@ for ind1 = 1:35
       galfa_r = galfa[lowalfa2:highalfa2]
       v1 = zeros(nalfa_r)
       for ind5 = 1:nqp
-         nw = gs[ind2].*(rf .+ galfa_r .*(gret[ind5]-rf)) 
+         nw = gs[ind2].*(rf .+ galfa_r .*(gret[ind5]-rf))
          nv = uprime.(itp_ctp1[nw .+ ret_y],gamma) .* (gret[ind5]-rf) * weig[ind5]
          v1 .+= nv
       end
@@ -198,7 +199,7 @@ for ind1 = 1:35
       c1 = 0.0
       v1 = 0.0
       for ind5 = 1:nqp
-         nw = gs[ind2]*(rf+ alfa2*(gret[ind5]-rf)) 
+         nw = gs[ind2]*(rf+ alfa2*(gret[ind5]-rf))
          nv = uprime(itp_ctp1[nw+ret_y],gamma) * (rf+ alfa2*(gret[ind5]-rf)) * weig[ind5]
          c1 += nv
          nvv = itp_vtp1[nw+ret_y]  * weig[ind5]
@@ -223,8 +224,8 @@ for ind1 = 1:(tt-35)
    age = t+tb-1
    println(string(t, " ",age))
    #interpolate cons_tp1
-   itp_ctp1 = interpolate((vcat(0.0,gcash),),vcat(0.0,c),inttype) 
-   itp_vtp1 = interpolate((gcash,),v,inttype) 
+   itp_ctp1 = interpolate((vcat(0.0,gcash),),vcat(0.0,c),inttype)
+   itp_vtp1 = interpolate((gcash,),v,inttype)
    for ind2 =  1:ns
       lowalfa2 = 1
       highalfa2 = nalfa
@@ -238,7 +239,7 @@ for ind1 = 1:(tt-35)
       galfa_r = galfa[lowalfa2:highalfa2]
       v1 = zeros(nalfa_r)
       @inbounds for ind5 = 1:nqp
-         nw = gs[ind2].*(rf .+ galfa_r .*(gret[ind5]-rf))   
+         nw = gs[ind2].*(rf .+ galfa_r .*(gret[ind5]-rf))
          @inbounds for ind6 = 1:nqp, ind7 = 1:nqp
             ctp1 = nw.+f_y[ind6,t]*(expeyp[ind7]+reg_coef*gret[ind5])
             nv = uprime.(itp_ctp1[ctp1],gamma) .* (gret[ind5]-rf) * (weig[ind5]*weig[ind6]*weig[ind7])
@@ -289,7 +290,7 @@ Nhh = 10000
 function simincome(Nhh,sig_t,sig_p)
 	# deterministic income profile
 	coefs = [-2.170042+2.700381; 0.16818; -0.0323371/10; 0.0019704/100]
-	
+
 	reprate = 0.68212
 	income = zeros(80,Nhh)
 	prm = zeros(80,Nhh)
@@ -298,7 +299,7 @@ function simincome(Nhh,sig_t,sig_p)
 	income[1,:] = exp.(vecdot([1.0;(tb+1);(tb+1)^2;(tb+1)^3],coefs)) .* prm[1,:]' .* exp.(sig_t.*randn(1,Nhh))
 	for age = (tb+2):tr
 		ind = age-tb
-      avg = exp.(vecdot([1.0;age;age^2;age^3],coefs))	
+      avg = exp.(vecdot([1.0;age;age^2;age^3],coefs))
       prm[ind,:] = prm[ind-1,:]' .* exp.(sig_p.*randn(1,Nhh))
       income[ind,:] = avg .* prm[ind,:]' .* exp.(sig_t.*randn(1,Nhh))
    end
@@ -318,16 +319,16 @@ for t = 1:80 #(tb+1):td
    age = t+tb-1
    println(string(t, " ",age))
 	# set up proper policy interpolations
-	itp_cons = interpolate((vcat(0.0,wpol[:,t]),),vcat(0.0,cpol[:,t]),inttype)  
+	itp_cons = interpolate((vcat(0.0,wpol[:,t]),),vcat(0.0,cpol[:,t]),inttype)
 	itp_theta = interpolate((vcat(0.0,wpol[:,t]),),vcat(0.0,alfapol[:,t]),inttype)
-	
-	
+
+
 	theta[t,:] = clamp.(itp_theta[wealth[t,:]],0.0,1.0)
 	cons[t,:] = itp_cons[wealth[t,:]]
-	
+
 	if age+1<td
       ret = exc .+ (sigma_r^0.5 .* randn(Nhh))
-		wealth[t+1,:] = income[t,:] .+ (wealth[t,:] .- cons[t,:]).*(rf .+ theta[t,:].*ret) 
+		wealth[t+1,:] = income[t,:] .+ (wealth[t,:] .- cons[t,:]).*(rf .+ theta[t,:].*ret)
 	end
 end
 
@@ -339,4 +340,3 @@ writecsv("simincome_egm.csv",income)
 
 
 println("Done.")
-
