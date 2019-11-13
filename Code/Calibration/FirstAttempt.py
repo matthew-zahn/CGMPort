@@ -49,7 +49,7 @@ plt.grid()
 
 # %% A Simulation
 agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow',
-                    'mNrmNow','RiskyNow']
+                    'mNrmNow']
 agent.initializeSim()
 agent.simulate()
 
@@ -66,12 +66,11 @@ plt.ylabel('Risky share')
 plt.grid()
 
 # %% Collect results in a DataFrame
-raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
+raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born']-1,
             'pIncome': agent.pLvlNow_hist.flatten(),
             'rShare': agent.RiskyShareNow_hist.flatten(),
             'nrmM': agent.mNrmNow_hist.flatten(),
-            'nrmC': agent.cNrmNow_hist.flatten(),
-            'RiskyRet': agent.RiskyNow_hist.flatten()}
+            'nrmC': agent.cNrmNow_hist.flatten()}
 
 Data = pd.DataFrame(raw_data)
 Data['Cons'] = Data.nrmC * Data.pIncome
@@ -101,10 +100,11 @@ plt.ylabel('Risky Share')
 # %% Single agent plot (to show consumption is acting weird)
 
 ind = 0
-age = agent.t_age_hist[0:15,ind]+age_born
-p = agent.pLvlNow_hist[0:15,ind]
-c = agent.cNrmNow_hist[0:15,ind]
-m = agent.mNrmNow_hist[0:15,ind]
+T = 100
+age = agent.t_age_hist[0:T,ind]+age_born
+p = agent.pLvlNow_hist[0:T,ind]
+c = agent.cNrmNow_hist[0:T,ind]
+m = agent.mNrmNow_hist[0:T,ind]
 
 plt.figure()
 plt.plot(age,p,'.',label = 'P')

@@ -94,7 +94,9 @@ survprob[79] = 0.6961
 survprob[80] = 0.6809
 
 # Fix indexing problem (fortran starts at 1, python at 0)
-survprob = np.delete(survprob, [0,1])
+survprob = np.delete(survprob, [0])
+# Now we have 80 probabilities of death,
+# for ages 20 to 99.
 
 # Labor income
 
@@ -105,7 +107,7 @@ b2=-0.0323371/10
 b3=0.0019704/100
 
 t_start = 20
-t_ret   = 65
+t_ret   = 65 # We are currently interpreting this as the last period of work
 t_end   = 100
 time_params = {'Age_born': t_start, 'Age_retire': t_ret, 'Age_death': t_end}
 
@@ -126,6 +128,8 @@ det_income = np.concatenate((det_work_inc, det_ret_inc))
 
 # ln Gamma_t+1 = ln f_t+1 - ln f_t
 gr_fac = np.exp(np.diff(np.log(det_income)))
+
+# Now we have growth factors for T_end-1 periods.
 
 # %% Shocks
 
@@ -160,9 +164,9 @@ dict_portfolio = {
                    'DiscFac': DiscFac,
                     
                    # Life cycle
-                   'T_age' : t_end-t_start, # Time of death
-                   'T_cycle' : t_end-t_start, # Simulation timeframe
-                   'T_retire':t_ret-t_start,
+                   'T_age' : t_end-t_start+1, # Time of death
+                   'T_cycle' : t_end-t_start, # Number of non-terminal periods
+                   'T_retire':t_ret-t_start+1,
                    'LivPrb': survprob.tolist(),
                    'PermGroFac': gr_fac.tolist(),
                    'cycles': 1,
