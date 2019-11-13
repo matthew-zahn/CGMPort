@@ -191,8 +191,8 @@ dict_portfolio = {
                   
                    # Grid stuff? 
                    'aXtraMin': 0.001,
-                   'aXtraMax': 20,
-                   'aXtraCount': 48,
+                   'aXtraMax': 100,
+                   'aXtraCount': 100,
                    'aXtraExtra': [None],
                    'aXtraNestFac': 3,
                    
@@ -201,10 +201,10 @@ dict_portfolio = {
                    'CubicBool': False,
                    
                    # Simulation params
-                   'AgentCount': 50,
+                   'AgentCount': 10,
                    'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
                    'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
-                   'T_sim': (t_end - t_start)*10,
+                   'T_sim': (t_end - t_start+1)*50,
                    
                    # Unused params required for simulation
                    'PermGroFacAgg': 1,
