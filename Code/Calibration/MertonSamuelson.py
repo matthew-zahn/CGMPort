@@ -8,7 +8,7 @@ Created on Sun Nov 17 09:31:45 2019
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
-from params import dict_portfolio, time_params, det_income
+from params import dict_portfolio, time_params, det_income, Mu, Rfree, Std
 import pandas as pd
 
 norm_factor = det_income * np.exp(1)
@@ -61,7 +61,7 @@ plt.title('Risky Portfolio Share by Age')
 plt.show()
 
 # Plot for the second to last period of life
-plt.plot(eevalgrid, agent.solution[79-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[79-age_born]))
+plt.plot(eevalgrid, agent.solution[79].RiskyShareFunc[0][0](eevalgrid/norm_factor[79-age_born]))
 plt.axhline(agent.MertSamCampVicShare, c='r') # The Campbell-Viceira approximation
 plt.ylim(0,1.05)
 plt.text((aMax-aMin)/4,0.15,r'$\uparrow $ limit as  $m \uparrow \infty$',fontsize = 22,fontweight='bold')
