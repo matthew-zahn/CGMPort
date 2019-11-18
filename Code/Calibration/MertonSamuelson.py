@@ -23,7 +23,8 @@ RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=mu, RiskyStd=Std) # Generate
 dict_portfolio['T_retire'] = 0 
 survprob2 = [0.98]*80
 dict_portfolio['LivPrb'] = survprob2
-dict_portfolio['aXtraCount'] = 50 # Align with notebook
+dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
+dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
@@ -31,8 +32,8 @@ agent.solve()
 # %%
 
 aMin = 0   # Minimum ratio of assets to income to plot
-aMax = 10000  # Maximum ratio of assets to income to plot
-aPts = 100000 # Number of points to plot 
+aMax = 100000  # Maximum ratio of assets to income to plot
+aPts = 1000 # Number of points to plot 
 
 # Campbell-Viceira (2002) approximation to optimal portfolio share in Merton-Samuelson (1969) model
 agent.MertSamCampVicShare = agent.RiskyShareLimitFunc(RiskyDstnFunc(dict_portfolio['RiskyCount']))
