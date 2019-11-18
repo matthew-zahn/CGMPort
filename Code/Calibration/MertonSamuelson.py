@@ -9,7 +9,6 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
 from params import dict_portfolio, time_params, det_income, Mu, Rfree, Std
-import pandas as pd
 
 norm_factor = det_income * np.exp(1)
 
@@ -20,9 +19,6 @@ RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=mu, RiskyStd=Std) # Generates node
 RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=mu, RiskyStd=Std) # Generates draws from the "true" distribution
 
 # Make agent inifitely lived. Following parameter examples from ConsumptionSaving Notebook
-dict_portfolio['T_retire'] = 0 
-survprob2 = [0.98]*80
-dict_portfolio['LivPrb'] = survprob2
 dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
 dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
 
