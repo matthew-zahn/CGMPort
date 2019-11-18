@@ -8,9 +8,7 @@ Created on Sun Nov 17 09:31:45 2019
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
-from params import dict_portfolio, time_params, det_income, Mu, Rfree, Std
-
-norm_factor = det_income * np.exp(1)
+from params import dict_portfolio, time_params, det_income, Mu, Rfree, Std, norm_factor
 
 # Adjust certain parameters to align with Merton-Samuleson
 # Log normal returns (Overwriting Noramal returns defined in params)
