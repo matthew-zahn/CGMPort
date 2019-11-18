@@ -203,7 +203,7 @@ dict_portfolio = {
                    # Simulation params
                    'AgentCount': 10,
                    'pLvlInitMean' : np.log(det_income[0]), # Mean of log initial permanent income (only matters for simulation)
-                   'pLvlInitStd' : 0.0,  # Standard deviation of log initial permanent income (only matters for simulation)
+                   'pLvlInitStd' : std_perm_shock,  # Standard deviation of log initial permanent income (only matters for simulation)
                    'T_sim': (t_end - t_start+1)*50,
                    
                    # Unused params required for simulation
