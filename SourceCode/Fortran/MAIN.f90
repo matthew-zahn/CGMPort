@@ -237,7 +237,8 @@ DO ind1=1,ncash
 END DO
 aux3(:,1) = gcash(1,:)
 DO ind1=1,nc
-   gc(1,ind1)=0.0+(ind1-1.0)*0.25
+   !gc(1,ind1)=0.0+(ind1-1.0)*0.25
+   gc(1,ind1)=1+(ind1-1.0)*0.25
 END DO
 
 !!!!!!!!!!!!!!!!
@@ -258,7 +259,7 @@ ret_y= ret_fac*avg
 !!!!!!!!!!!!!!!!!!!
 ! TERMINAL PERIOD !
 !!!!!!!!!!!!!!!!!!!
-
+!print *, 'GCASH has the following values', gcash
 CALL utility(gcash,ncash,gamma,ut)
 
 v(1,:)= ut(1,:)
@@ -269,110 +270,110 @@ c(1,:)= gcash(1,:)
 !!!!!!!!!!!!!!!!!!!!!!
 ! RETIREMENT PERIODS !
 !!!!!!!!!!!!!!!!!!!!!!
-
+!print *, 'GC has the following values', gc
 CALL utility(gc,nc,gamma,u)
 tt=80
-DO ind1= 1,35
-   t= tt-ind1+1
-   WRITE(*,*) t
-   call spline(aux3,v(1,:),ncash,gamma,secd)
-   DO ind2= 1,ncash
-      IF (t.eq.tn-1) THEN
-         lowc= c(1,ind2)/2.0
-         highc= c(1,ind2)
-         if (gcash(1,ind2).ge.50) then
-             highc= c(1,ind2)/1.5
-         end if
-       ELSE IF (t.eq.tn-2) THEN
-         lowc= c(1,ind2)/2.5
-         highc= c(1,ind2)
-         if (gcash(1,ind2).ge.50) then
-             highc= c(1,ind2)/1.2
-         end if
-       ELSE IF (t<tn-2 .AND. t>tn-5) THEN
-         lowc= c(1,ind2)/3.5
-         highc= c(1,ind2)+0.0
-         if (gcash(1,ind2).ge.50) then
-            highc= c(1,ind2)/1.1
-         end if
-       ELSE
-         lowc= c(1,ind2)-10.0
-         highc= c(1,ind2)+10.0
-       END IF
-       CALL ntoi(lowc,1,gc,nc,lowc2)
-       CALL ntoi(highc,1,gc,nc,highc2)
-       nc_r= highc2-lowc2+1
-       ALLOCATE (gc_r(1,nc_r))
-       gc_r(1,:)= gc(1,lowc2:highc2)
-       lowalfa2= 1.0
-       highalfa2= nalfa
-       IF (gcash(1,ind2)>40.0.and.t<tn-1) THEN
-          lowalfa= alfa(1,ind2)-0.2
-          highalfa= alfa(1,ind2)+0.2
-          CALL ntoi(lowalfa,1,galfa,nalfa,lowalfa2)
-          CALL ntoi(highalfa,1,galfa,nalfa,highalfa2)
-       END IF
-       nalfa_r= highalfa2-lowalfa2+1
-       ALLOCATE(galfa_r(nalfa_r,1))
-       galfa_r(:,1) = galfa(lowalfa2:highalfa2,1)
-       ALLOCATE(invest(nc_r,1))
-       ALLOCATE(ones(nc_r,1))
-       ones(:,1) = 1.0
-       invest(:,1) = gcash(1,ind2)*ones(:,1)-gc_r(1,:)
-       DEALLOCATE(ones)
-       ALLOCATE(u_r(nc_r,1))
-       u_r(:,1) = u(1,lowc2:highc2)
-       ALLOCATE(u2(nc_r,1))
-       do ind4=1,nc_r
-          IF (invest(ind4,1)<0.0) then
-            u2(ind4,1) = infinity
-	  else
-	    u2(ind4,1) = u_r(ind4,1)
-	  END if
-       end do
-       invest = MAX(invest,0.0)
-       ALLOCATE(u3(nc_r,nalfa_r))
-       do ind4=1,nalfa_r
-          u3(:,ind4)=u2(:,1)
-       end do
-       u3 = MAX(u3,infinity)
-       ALLOCATE(v1(nc_r,nalfa_r))
-       v1=0.0
-       ALLOCATE(nw(nc_r,nalfa_r))
-       ALLOCATE(nv(nc_r,nalfa_r))
-       do ind5=1,nqp
-          call fci(invest,nc_r,galfa_r,nalfa_r,gret(ind5,1),rf,nw)
-          call evr(nw,nc_r,nalfa_r,v(1,:),1,ncash,ret_y,aux3,secd,nv)
-          v1 = v1+nv*weig(ind5,1)
-       end do
-       DEALLOCATE(nw,nv,u2,u_r,invest,galfa_r,gc_r)
-       ALLOCATE(vv(nc_r,nalfa_r))
-       vv = u3+delta2(t,1)*v1
-       vv = MAX(vv,infinity)
-       ALLOCATE(auxv(nc_r*nalfa_r,1))
-       auxv = RESHAPE((vv),(/nc_r*nalfa_r,1/))
-       v(2,ind2) = MAXVAL(auxv(:,1))
-       pt = MAXLOC(auxv(:,1))
-       aux2 = FLOOR((REAL(pt(1))-1)/REAL(nc_r))
-       alfa(2,ind2) = galfa(aux2+lowalfa2,1)
-       c(2,ind2) = gc(1,pt(1)-aux2*nc_r+lowc2-1)
-       DEALLOCATE(auxv,vv,v1,u3)
-  END DO
-  OPEN(UNIT=25,FILE=filename(t,1),STATUS='replace',ACTION='write')
-  do ind5=1,ncash
-    WRITE(25,*) alfa(2,ind5)
-  end do
-  do ind5=1,ncash
-	WRITE(25,*) c(2,ind5)
-  end do
-  do ind5=1,ncash
-	WRITE(25,*) v(2,ind5)
-  end do
-  CLOSE(UNIT=25)
-  v(1,:)=v(2,:)
-  c(1,:)=c(2,:)
-  alfa(1,:)=alfa(2,:)
-END DO
+!$$$$$$ DO ind1= 1,35
+!$$$$$$    t= tt-ind1+1
+!$$$$$$    WRITE(*,*) t
+!$$$$$$    call spline(aux3,v(1,:),ncash,gamma,secd)
+!$$$$$$    DO ind2= 1,ncash
+!$$$$$$       IF (t.eq.tn-1) THEN
+!$$$$$$          lowc= c(1,ind2)/2.0
+!$$$$$$          highc= c(1,ind2)
+!$$$$$$          if (gcash(1,ind2).ge.50) then
+!$$$$$$              highc= c(1,ind2)/1.5
+!$$$$$$          end if
+!$$$$$$        ELSE IF (t.eq.tn-2) THEN
+!$$$$$$          lowc= c(1,ind2)/2.5
+!$$$$$$          highc= c(1,ind2)
+!$$$$$$          if (gcash(1,ind2).ge.50) then
+!$$$$$$              highc= c(1,ind2)/1.2
+!$$$$$$          end if
+!$$$$$$        ELSE IF (t<tn-2 .AND. t>tn-5) THEN
+!$$$$$$          lowc= c(1,ind2)/3.5
+!$$$$$$          highc= c(1,ind2)+0.0
+!$$$$$$          if (gcash(1,ind2).ge.50) then
+!$$$$$$             highc= c(1,ind2)/1.1
+!$$$$$$          end if
+!$$$$$$        ELSE
+!$$$$$$          lowc= c(1,ind2)-10.0
+!$$$$$$          highc= c(1,ind2)+10.0
+!$$$$$$        END IF
+!$$$$$$        CALL ntoi(lowc,1,gc,nc,lowc2)
+!$$$$$$        CALL ntoi(highc,1,gc,nc,highc2)
+!$$$$$$        nc_r= highc2-lowc2+1
+!$$$$$$        ALLOCATE (gc_r(1,nc_r))
+!$$$$$$        gc_r(1,:)= gc(1,lowc2:highc2)
+!$$$$$$        lowalfa2= 1.0
+!$$$$$$        highalfa2= nalfa
+!$$$$$$        IF (gcash(1,ind2)>40.0.and.t<tn-1) THEN
+!$$$$$$           lowalfa= alfa(1,ind2)-0.2
+!$$$$$$           highalfa= alfa(1,ind2)+0.2
+!$$$$$$           CALL ntoi(lowalfa,1,galfa,nalfa,lowalfa2)
+!$$$$$$           CALL ntoi(highalfa,1,galfa,nalfa,highalfa2)
+!$$$$$$        END IF
+!$$$$$$        nalfa_r= highalfa2-lowalfa2+1
+!$$$$$$        ALLOCATE(galfa_r(nalfa_r,1))
+!$$$$$$        galfa_r(:,1) = galfa(lowalfa2:highalfa2,1)
+!$$$$$$        ALLOCATE(invest(nc_r,1))
+!$$$$$$        ALLOCATE(ones(nc_r,1))
+!$$$$$$        ones(:,1) = 1.0
+!$$$$$$        invest(:,1) = gcash(1,ind2)*ones(:,1)-gc_r(1,:)
+!$$$$$$        DEALLOCATE(ones)
+!$$$$$$        ALLOCATE(u_r(nc_r,1))
+!$$$$$$        u_r(:,1) = u(1,lowc2:highc2)
+!$$$$$$        ALLOCATE(u2(nc_r,1))
+!$$$$$$        do ind4=1,nc_r
+!$$$$$$           IF (invest(ind4,1)<0.0) then
+!$$$$$$             u2(ind4,1) = infinity
+!$$$$$$       else
+!$$$$$$         u2(ind4,1) = u_r(ind4,1)
+!$$$$$$       END if
+!$$$$$$        end do
+!$$$$$$        invest = MAX(invest,0.0)
+!$$$$$$        ALLOCATE(u3(nc_r,nalfa_r))
+!$$$$$$        do ind4=1,nalfa_r
+!$$$$$$           u3(:,ind4)=u2(:,1)
+!$$$$$$        end do
+!$$$$$$        u3 = MAX(u3,infinity)
+!$$$$$$        ALLOCATE(v1(nc_r,nalfa_r))
+!$$$$$$        v1=0.0
+!$$$$$$        ALLOCATE(nw(nc_r,nalfa_r))
+!$$$$$$        ALLOCATE(nv(nc_r,nalfa_r))
+!$$$$$$        do ind5=1,nqp
+!$$$$$$           call fci(invest,nc_r,galfa_r,nalfa_r,gret(ind5,1),rf,nw)
+!$$$$$$           call evr(nw,nc_r,nalfa_r,v(1,:),1,ncash,ret_y,aux3,secd,nv)
+!$$$$$$           v1 = v1+nv*weig(ind5,1)
+!$$$$$$        end do
+!$$$$$$        DEALLOCATE(nw,nv,u2,u_r,invest,galfa_r,gc_r)
+!$$$$$$        ALLOCATE(vv(nc_r,nalfa_r))
+!$$$$$$        vv = u3+delta2(t,1)*v1
+!$$$$$$        vv = MAX(vv,infinity)
+!$$$$$$        ALLOCATE(auxv(nc_r*nalfa_r,1))
+!$$$$$$        auxv = RESHAPE((vv),(/nc_r*nalfa_r,1/))
+!$$$$$$        v(2,ind2) = MAXVAL(auxv(:,1))
+!$$$$$$        pt = MAXLOC(auxv(:,1))
+!$$$$$$        aux2 = FLOOR((REAL(pt(1))-1)/REAL(nc_r))
+!$$$$$$        alfa(2,ind2) = galfa(aux2+lowalfa2,1)
+!$$$$$$        c(2,ind2) = gc(1,pt(1)-aux2*nc_r+lowc2-1)
+!$$$$$$        DEALLOCATE(auxv,vv,v1,u3)
+!$$$$$$   END DO
+!$$$$$$   OPEN(UNIT=25,FILE=filename(t,1),STATUS='replace',ACTION='write')
+!$$$$$$   do ind5=1,ncash
+!$$$$$$     WRITE(25,*) alfa(2,ind5)
+!$$$$$$   end do
+!$$$$$$   do ind5=1,ncash
+!$$$$$$     WRITE(25,*) c(2,ind5)
+!$$$$$$   end do
+!$$$$$$   do ind5=1,ncash
+!$$$$$$     WRITE(25,*) v(2,ind5)
+!$$$$$$   end do
+!$$$$$$   CLOSE(UNIT=25)
+!$$$$$$   v(1,:)=v(2,:)
+!$$$$$$   c(1,:)=c(2,:)
+!$$$$$$   alfa(1,:)=alfa(2,:)
+!$$$$$$ END DO
 
 !!!!!!!!!!!!!!!!!
 ! OTHER PERIODS !
@@ -434,8 +435,7 @@ DO ind1= 1,tt-35
 	ALLOCATE(nv(nc_r,nalfa_r))
 	do ind5=1,nqp
 	   call fci(invest,nc_r,galfa_r,nalfa_r,gret(ind5,1),rf,nw)
-	   call ev(nw,nc_r,nalfa_r,v(1,:),ncash,weig,nqp,f_y(:,t),expeyp, &
-                       aux3,secd,gret(ind5,1),reg_coef,nv)
+	   call ev(nw,nc_r,nalfa_r,v(1,:),ncash,weig,nqp,f_y(:,t),expeyp,aux3,secd,gret(ind5,1),reg_coef,nv) !Former multiline comment. Changed.
 	   v1 = v1+nv*weig(ind5,1)
 	end do
 	DEALLOCATE(nw,nv,u2,u_r,invest,galfa_r,gc_r)
