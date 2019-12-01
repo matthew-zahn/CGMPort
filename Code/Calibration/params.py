@@ -1,5 +1,4 @@
 import numpy as np
-import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 from HARK.simulation import drawNormal
 from HARK.utilities import approxNormal
 # %% Preferences
@@ -176,9 +175,9 @@ dict_portfolio = {
         
                    # Income shocks
                    'PermShkStd': std_perm_vec,
-                   'PermShkCount': 7,
+                   'PermShkCount': 3,
                    'TranShkStd': std_tran_vec,
-                   'TranShkCount': 7,
+                   'TranShkCount': 3,
                    'UnempPrb': 0,
                    'UnempPrbRet': 0,
                    'IncUnemp': 0,
@@ -189,7 +188,7 @@ dict_portfolio = {
                     # Portfolio related params
                    'approxRiskyDstn': RiskyDstnFunc,
                    'drawRiskyFunc': RiskyDrawFunc,
-                   'RiskyCount': 10,
+                   'RiskyCount': 3,
                    'RiskyShareCount': 30,
                   
                    # Grid stuff? 
