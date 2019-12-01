@@ -74,37 +74,51 @@ cons_error   = np.abs(h_cons - cons)
 share_error = np.abs(h_share - share)
 
 ## Heatmaps
-f, axes = plt.subplots(1, 3, figsize=(3, 10), sharex=True)
+
+# Consumption
+f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
 seaborn.despine(left=True)
+
+seaborn.heatmap(h_cons, ax = axes[0])
+axes[0].set_title('HARK')
+axes[0].set_xlabel('Assets')
+axes[0].set_ylabel('Age')
+
+seaborn.heatmap(cons, ax = axes[1])
+axes[1].set_title('CGM')
+axes[1].set_xlabel('Assets')
+axes[1].set_ylabel('Age')
+
 seaborn.heatmap(cons_error, ax = axes[2])
-plt.title('$C(\cdot)$ absolute error')
-plt.xlabel('Assets')
-plt.ylabel('Age')
+axes[2].set_title('Abs. Difference')
+axes[2].set_xlabel('Assets')
+axes[2].set_ylabel('Age')
 
-plt.figure()
-seaborn.heatmap(share_error)
-plt.title('$S(\cdot)$ absolute error')
-plt.xlabel('Assets')
-plt.ylabel('Age')
+f.suptitle('$C(\cdot)$')
 
-## Surfaces
+f.tight_layout()
+f.subplots_adjust(top=0.8)
 
-# Create x and y grids
-x = np.array([range(nyears),]*npoints).transpose()
-y = y =np.array([agrid,]*nyears)
+# Risky share
+f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
+seaborn.despine(left=True)
 
-# Plot the surfaces
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot_surface(x,y, cons_error)
-ax.set_title('$C(\cdot)$ absolute error')
-ax.set_xlabel('Assets')
-ax.set_ylabel('Age')
+seaborn.heatmap(h_share, ax = axes[0])
+axes[0].set_title('HARK')
+axes[0].set_xlabel('Assets')
+axes[0].set_ylabel('Age')
 
-# Plot the surfaces
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot_surface(x,y, share_error)
-ax.set_title('$S(\cdot)$ absolute error')
-ax.set_xlabel('Assets')
-ax.set_ylabel('Age')
+seaborn.heatmap(share, ax = axes[1])
+axes[1].set_title('CGM')
+axes[1].set_xlabel('Assets')
+axes[1].set_ylabel('Age')
+
+seaborn.heatmap(share_error, ax = axes[2])
+axes[2].set_title('Abs. Difference')
+axes[2].set_xlabel('Assets')
+axes[2].set_ylabel('Age')
+
+f.suptitle('$S(\cdot)$')
+
+f.tight_layout()
+f.subplots_adjust(top=0.8)
