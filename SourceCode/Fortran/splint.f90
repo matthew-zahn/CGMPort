@@ -7,6 +7,7 @@ INTEGER :: k, khi, klo, indr, indc
 REAL :: a, b, h
 klo = 1
 khi = n
+!print *, 'The fifth argument in Splint.f90 is', x
 do indr=1,nrow
   do indc=1,ncol
        klo = 1
