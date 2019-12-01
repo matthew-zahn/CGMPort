@@ -70,11 +70,41 @@ for year in range(nyears):
     h_share[year,:] = agent.solution[year].RiskyShareFunc[0][0](agrid/norm_factor[year])
 
 # %% Compare the results
+cons_error   = np.abs(h_cons - cons)
+share_error = np.abs(h_share - share)
 
-cons_error   = h_cons - cons
-share_error = h_share - share
+## Heatmaps
+f, axes = plt.subplots(1, 3, figsize=(3, 10), sharex=True)
+seaborn.despine(left=True)
+seaborn.heatmap(cons_error, ax = axes[2])
+plt.title('$C(\cdot)$ absolute error')
+plt.xlabel('Assets')
+plt.ylabel('Age')
 
-plt.figure()
-seaborn.heatmap(cons_error)
 plt.figure()
 seaborn.heatmap(share_error)
+plt.title('$S(\cdot)$ absolute error')
+plt.xlabel('Assets')
+plt.ylabel('Age')
+
+## Surfaces
+
+# Create x and y grids
+x = np.array([range(nyears),]*npoints).transpose()
+y = y =np.array([agrid,]*nyears)
+
+# Plot the surfaces
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(x,y, cons_error)
+ax.set_title('$C(\cdot)$ absolute error')
+ax.set_xlabel('Assets')
+ax.set_ylabel('Age')
+
+# Plot the surfaces
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(x,y, share_error)
+ax.set_title('$S(\cdot)$ absolute error')
+ax.set_xlabel('Assets')
+ax.set_ylabel('Age')
