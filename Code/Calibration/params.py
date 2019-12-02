@@ -193,8 +193,8 @@ dict_portfolio = {
                   
                    # Grid stuff? 
                    'aXtraMin': 0.001,
-                   'aXtraMax': 100,
-                   'aXtraCount': 100,
+                   'aXtraMax': 400,
+                   'aXtraCount': 400,
                    'aXtraExtra': [None],
                    'aXtraNestFac': 3,
                    
