@@ -158,7 +158,9 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # %%
 # Calibrate the model in line with the information above
 import sys,os
-sys.path.append(os.path.realpath('../Code/Calibration')) # [[Explain what this does. Navigate to folder. What the script does.]]
+# The following code navigates to another directory where a python script with the parameters for the model is saved.
+sys.path.append(os.path.realpath('../Code/Calibration')) 
+# Loading the parameters from the ../Code/Calibration/params.py script
 from params import dict_portfolio, time_params, det_income
 
 
