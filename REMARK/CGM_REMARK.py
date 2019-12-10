@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.4
+#       jupytext_version: 1.2.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -23,7 +23,7 @@
 #
 #  This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is the $\texttt{PortfolioConsumerType}$ class. For an introduction to this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook.
 #
-#  __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context. Original results from the paper act as placeholders for ongoing replications.
+#  __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context.
 
 # %%
 # This cell does some preliminary set up
@@ -100,7 +100,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 #
 # |HARK | Cocco et. al |
 # | :---: | :-----------: |
-# | $P_{i,0}$ | $f(0,Z_{i,0})$ + $v_{i,0}$ |
+# | $\ln$ $P_{i,0}$ | $f(0,Z_{i,0})$ + $v_{i,0}$ |
 # | $\ln$ $\Gamma_{t+1}$| $f(t+1$, $Z_{i,t+1})$ - $f(t,Z_{i,t})$|
 # |$\ln$ $\psi_{i,k}$| $u_{i,k}$|
 # |$\ln$ $\theta_{i,t}$| $\varepsilon_{i,t}$|
@@ -230,6 +230,10 @@ plt.legend()
 plt.grid()
 
 # %% [markdown]
+# We present the author's originally reported policy functions for comparison
+# <center><img src="Figures\Opt_shares_by_age.jpg" style="height:300px"></center>
+
+# %% [markdown]
 # #### Consumption behavior
 #
 # The plot below shows the policy function for consumption as a function of wealth at different ages.
@@ -251,35 +255,70 @@ plt.legend()
 plt.grid()
 
 # %% [markdown]
+# We again present the author's originally reported policy functions for comparison
+# <center><img src="Figures\Opt_cons_by_age.jpg" style="height:300px"></center>
+
+# %% [markdown]
 # ### Simulations
 #
 # Using the policy functions obtained from solving the model we present a series of simulations to highlight features of the model.
 #
+# We first run a few simulations to verify the quality of our calibration.
+#
 # The figures below show simulated levels of permanent income and risky portfolio shares for 100 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 20% once they reach retirement.
 
 # %% A Simulation
+# Set up simulation parameters
+
+# Number of agents and periods in the simulation.
+agent.AgentCount = 5 # Number of instances of the class to be simulated.
+# Since agents can die, they are replaced by a new agent whenever they do.
+
+# Number of periods to be simulated
+agent.T_sim = 80
+
+# Set up the variables we want to keep track of.
 agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age', 'RiskyShareNow','mNrmNow']
+
+# Run the simulations
 agent.initializeSim()
 agent.simulate()
 
+# Present diagnostic plots.
 plt.figure()
 plt.plot(agent.t_age_hist+time_params['Age_born'], agent.pLvlNow_hist,'.')
 plt.xlabel('Age')
 plt.ylabel('Permanent income')
-plt.title('Simulated Income and Risky Portfolio Shares')
+plt.title('Simulated Income Paths')
 plt.grid()
 
 plt.figure()
 plt.plot(agent.t_age_hist+time_params['Age_born'], agent.RiskyShareNow_hist,'.')
 plt.xlabel('Age')
 plt.ylabel('Risky share')
+plt.title('Simulated Risky Portfolio Shares')
 plt.grid()
 
 # %% [markdown]
-# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. __[[Agents appear to be earning too much market resources at the moment. Place holder for updated results and discussion based on updates to HARK toolkit.]]__
+# #### The average life cycle patterns
+#
+# We now increase the number of simulations to examine and compare the behavior of variable means. In each case we present the original plots from the paper for reference.
+#
+# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. __[[Agents appear to be accumulating too much market resources at the moment]]__
 
 
 # %% Collect results in a DataFrame
+# Number of agents and periods in the simulation.
+agent.AgentCount = 50 # Number of instances of the class to be simulated.
+# Since agents can die, they are replaced by a new agent whenever they do.
+
+# Number of periods to be simulated
+agent.T_sim = 80*50
+
+# Run the simulations
+agent.initializeSim()
+agent.simulate()
+
 raw_data = {'Age': agent.t_age_hist.flatten()+time_params['Age_born'],
             'pIncome': agent.pLvlNow_hist.flatten(),
             'rShare': agent.RiskyShareNow_hist.flatten(),
@@ -304,31 +343,33 @@ plt.plot(AgeMeans.Age, AgeMeans.Cons,
 plt.legend()
 plt.xlabel('Age')
 plt.title('Variable Means Conditional on Survival')
+plt.grid()
+
+# %% [markdown]
+# <center><img src="Figures\ConsWInc.png" style="height:300px"></center>
+
+# %%
+# Find age percentiles
+AgePC5 = Data.groupby(['Age']).quantile(0.05).reset_index()
+AgePC95 = Data.groupby(['Age']).quantile(0.95).reset_index()
 
 plt.figure()
-plt.plot(AgeMeans.Age, AgeMeans.rShare)
+plt.plot(AgeMeans.Age, AgeMeans.rShare, label = 'Mean')
+plt.plot(AgePC5.Age, AgePC5.rShare, '--k')
+plt.plot(AgePC95.Age, AgePC95.rShare, '--k', label = 'Perc. 5 and 95')
+plt.legend()
+
 plt.xlabel('Age')
 plt.ylabel('Risky Share')
+plt.title('Risky Portfolio Share Mean Conditional on Survival')
+plt.grid()
 
 # %% [markdown]
-# The plot below illustrates the dynamics of permanent income, consumption, and market resources for a single agent. This plot highlights some unusual consumption dynamics as well as the beginning of sharp increase in market resources.
-
-
-# %% Single agent plot (to show consumption is acting weird)
-ind = 0
-age = agent.t_age_hist[0:15,ind]+age_born
-p = agent.pLvlNow_hist[0:15,ind]
-c = agent.cNrmNow_hist[0:15,ind]
-m = agent.mNrmNow_hist[0:15,ind]
-
-plt.figure()
-plt.plot(age,p,'.',label = 'Income')
-plt.plot(age,m*p,'.', label = 'Market Resources')
-plt.plot(age,c*p,'.', label = 'Consumption')
-plt.legend()
-plt.xlabel('Age')
+# <center><img src="Figures\ShareMeanSim.png" style="height:300px"></center>
 
 # %% [markdown]
+# ### Other results in the original paper
+#
 # #### The welfare implications of different allocation rules
 #
 # The authors next conduct a welfare analysis of different allocation rules, including popular heuristics. The rules are presented in the next figure.
@@ -363,6 +404,9 @@ plt.xlabel('Age')
 # - Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
 # - The authors report taking the normalization $v_{i,t} = 1$. However the ranges of their results seem more consistent with $v_{i,t} = 0$ so that $\exp (v_{i,t}) = 1$, which also makes more sense for interpretation.
 #
+
+# %% [markdown]
+# ### Bibliographic entry of the original article
 
 # %%
 ### Bibtex entry
