@@ -346,7 +346,7 @@ plt.title('Variable Means Conditional on Survival')
 plt.grid()
 
 # %% [markdown]
-# <center><img src="Figures\ConsWInc.png" style="height:300px"></center>
+# <center><img src="Figures\ConsWInc.jpg" style="height:300px"></center>
 
 # %%
 # Find age percentiles
@@ -365,7 +365,7 @@ plt.title('Risky Portfolio Share Mean Conditional on Survival')
 plt.grid()
 
 # %% [markdown]
-# <center><img src="Figures\ShareMeanSim.png" style="height:300px"></center>
+# <center><img src="Figures\ShareMeanSim.jpg" style="height:300px"></center>
 
 # %% [markdown]
 # ### Other results in the original paper
