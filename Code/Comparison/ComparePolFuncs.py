@@ -70,27 +70,30 @@ for year in range(nyears):
     h_share[year,:] = agent.solution[year].RiskyShareFunc[0][0](agrid/norm_factor[year])
 
 # %% Compare the results
-cons_error   = np.abs(h_cons - cons)
-share_error = np.abs(h_share - share)
+cons_error   = h_cons - cons
+share_error = h_share - share
 
 ## Heatmaps
 
 # Consumption
+
+# Find max consumption (for the color map)
+cmax = max(np.max(h_cons),np.max(cons))
 f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
 seaborn.despine(left=True)
 
-seaborn.heatmap(h_cons, ax = axes[0])
+seaborn.heatmap(h_cons, ax = axes[0], vmin = 0, vmax = cmax)
 axes[0].set_title('HARK')
 axes[0].set_xlabel('Assets')
 axes[0].set_ylabel('Age')
 
-seaborn.heatmap(cons, ax = axes[1])
+seaborn.heatmap(cons, ax = axes[1], vmin = 0, vmax = cmax)
 axes[1].set_title('CGM')
 axes[1].set_xlabel('Assets')
 axes[1].set_ylabel('Age')
 
-seaborn.heatmap(cons_error, ax = axes[2])
-axes[2].set_title('Abs. Difference')
+seaborn.heatmap(cons_error, ax = axes[2], center = 0)
+axes[2].set_title('HARK - CGM')
 axes[2].set_xlabel('Assets')
 axes[2].set_ylabel('Age')
 
@@ -103,18 +106,18 @@ f.subplots_adjust(top=0.8)
 f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
 seaborn.despine(left=True)
 
-seaborn.heatmap(h_share, ax = axes[0])
+seaborn.heatmap(h_share, ax = axes[0], vmin = 0, vmax = 1)
 axes[0].set_title('HARK')
 axes[0].set_xlabel('Assets')
 axes[0].set_ylabel('Age')
 
-seaborn.heatmap(share, ax = axes[1])
+seaborn.heatmap(share, ax = axes[1], vmin = 0, vmax = 1)
 axes[1].set_title('CGM')
 axes[1].set_xlabel('Assets')
 axes[1].set_ylabel('Age')
 
-seaborn.heatmap(share_error, ax = axes[2])
-axes[2].set_title('Abs. Difference')
+seaborn.heatmap(share_error, ax = axes[2], center = 0)
+axes[2].set_title('HARK - CGM')
 axes[2].set_xlabel('Assets')
 axes[2].set_ylabel('Age')
 
