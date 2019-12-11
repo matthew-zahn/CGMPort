@@ -8,8 +8,12 @@ Created on Fri Oct 25 09:56:06 2019
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
-from params import dict_portfolio, time_params, norm_factor
-import pandas as pd
+
+# %% Calibration and solution
+import sys,os
+sys.path.append(os.path.realpath('../')) 
+# Loading the parameters from the ../Code/Calibration/params.py script
+from Calibration.params import dict_portfolio, time_params, norm_factor
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
