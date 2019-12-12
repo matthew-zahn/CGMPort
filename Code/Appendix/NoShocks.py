@@ -33,8 +33,7 @@ dict_portfolio['TranShkStd'] = [0]*80
 
 # Make agent inifitely lived. Following parameter examples from ConsumptionSaving Notebook
 dict_portfolio['T_retire'] = 0 
-survprob2 = [0.98]*80
-dict_portfolio['LivPrb'] = survprob2
+dict_portfolio['LivPrb'] = [0.98]*80
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
