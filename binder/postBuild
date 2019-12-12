@@ -1,0 +1,2 @@
+#!/bin/sh
+pip install git+https://github.com/econ-ark/HARK.git@master

@@ -8,7 +8,12 @@ Created on Sun Nov 17 09:31:45 2019
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
-from params import dict_portfolio, time_params, det_income, Mu, Rfree, Std, norm_factor
+
+# Import parameters from external file
+import sys,os
+sys.path.append(os.path.realpath('../')) 
+# Loading the parameters from the ../Code/Calibration/params.py script
+from Calibration.params import dict_portfolio, time_params, det_income, Mu, Rfree, Std, norm_factor
 
 # Adjust certain parameters to align with Merton-Samuleson
 # Log normal returns (Overwriting Noramal returns defined in params)

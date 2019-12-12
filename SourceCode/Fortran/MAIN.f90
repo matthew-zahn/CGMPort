@@ -237,7 +237,8 @@ DO ind1=1,ncash
 END DO
 aux3(:,1) = gcash(1,:)
 DO ind1=1,nc
-   gc(1,ind1)=0.0+(ind1-1.0)*0.25
+   !gc(1,ind1)=0.0+(ind1-1.0)*0.25
+   gc(1,ind1)=1+(ind1-1.0)*0.25
 END DO
 
 !!!!!!!!!!!!!!!!
@@ -258,7 +259,6 @@ ret_y= ret_fac*avg
 !!!!!!!!!!!!!!!!!!!
 ! TERMINAL PERIOD !
 !!!!!!!!!!!!!!!!!!!
-
 CALL utility(gcash,ncash,gamma,ut)
 
 v(1,:)= ut(1,:)
@@ -269,7 +269,6 @@ c(1,:)= gcash(1,:)
 !!!!!!!!!!!!!!!!!!!!!!
 ! RETIREMENT PERIODS !
 !!!!!!!!!!!!!!!!!!!!!!
-
 CALL utility(gc,nc,gamma,u)
 tt=80
 DO ind1= 1,35
@@ -326,9 +325,9 @@ DO ind1= 1,35
        do ind4=1,nc_r
           IF (invest(ind4,1)<0.0) then
             u2(ind4,1) = infinity
-	  else
-	    u2(ind4,1) = u_r(ind4,1)
-	  END if
+      else
+        u2(ind4,1) = u_r(ind4,1)
+      END if
        end do
        invest = MAX(invest,0.0)
        ALLOCATE(u3(nc_r,nalfa_r))
@@ -363,10 +362,10 @@ DO ind1= 1,35
     WRITE(25,*) alfa(2,ind5)
   end do
   do ind5=1,ncash
-	WRITE(25,*) c(2,ind5)
+    WRITE(25,*) c(2,ind5)
   end do
   do ind5=1,ncash
-	WRITE(25,*) v(2,ind5)
+    WRITE(25,*) v(2,ind5)
   end do
   CLOSE(UNIT=25)
   v(1,:)=v(2,:)
@@ -434,8 +433,7 @@ DO ind1= 1,tt-35
 	ALLOCATE(nv(nc_r,nalfa_r))
 	do ind5=1,nqp
 	   call fci(invest,nc_r,galfa_r,nalfa_r,gret(ind5,1),rf,nw)
-	   call ev(nw,nc_r,nalfa_r,v(1,:),ncash,weig,nqp,f_y(:,t),expeyp, &
-                       aux3,secd,gret(ind5,1),reg_coef,nv)
+	   call ev(nw,nc_r,nalfa_r,v(1,:),ncash,weig,nqp,f_y(:,t),expeyp,aux3,secd,gret(ind5,1),reg_coef,nv) !Former multiline comment. Changed.
 	   v1 = v1+nv*weig(ind5,1)
 	end do
 	DEALLOCATE(nw,nv,u2,u_r,invest,galfa_r,gc_r)
