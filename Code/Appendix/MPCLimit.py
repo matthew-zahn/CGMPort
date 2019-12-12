@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 17 09:31:45 2019
-
-@author: Matt
-"""
-
 # This file compares the solution obtained by HARK with the theoretical
 # result in 
 # http://www.econ2.jhu.edu/people/ccarroll/public/LectureNotes/Consumption/CRRA-RateRisk.pdf
@@ -29,6 +22,8 @@ from Calibration.params import dict_portfolio, time_params
 dict_portfolio['Rfree'] = 0.01
 # Make the agent less risk averse
 dict_portfolio['CRRA'] = 2
+# Do away with probability of death
+dict_portfolio['LivPrb'] = [1]*dict_portfolio['T_cycle']
 
 # Risky returns
 mu = 0.05
@@ -65,14 +60,14 @@ MPC_lim = 1 - (beta*E_R_exp)**(1/crra)
 # We will approximate the MPC as MPC(m_t) = c(m_t + 1) - c(m_t)
 
 # Set up the assets at which it will be evaluated
-aMin = 0   # Minimum ratio of assets to income to plot
-aMax = 50 # Maximum ratio of assets to income to plot
+aMin = 100   # Minimum ratio of assets to income to plot
+aMax = 500 # Maximum ratio of assets to income to plot
 aPts = 100 # Number of points to plot 
 
 eevalgrid = np.linspace(aMin,aMax,aPts)
 
 # Ages at which the plots will be generated
-ages = [20]
+ages = [20,30,55,75,99,100]
 
 # Plot our approximation at every age
 plt.figure()

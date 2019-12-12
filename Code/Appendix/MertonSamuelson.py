@@ -31,7 +31,7 @@ agent.solve()
 # %%
 
 aMin = 0   # Minimum ratio of assets to income to plot
-aMax = 100000  # Maximum ratio of assets to income to plot
+aMax = 1e5  # Maximum ratio of assets to income to plot
 aPts = 1000 # Number of points to plot 
 
 # Campbell-Viceira (2002) approximation to optimal portfolio share in Merton-Samuelson (1969) model
