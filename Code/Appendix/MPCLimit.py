@@ -60,14 +60,14 @@ MPC_lim = 1 - (beta*E_R_exp)**(1/crra)
 # We will approximate the MPC as MPC(m_t) = c(m_t + 1) - c(m_t)
 
 # Set up the assets at which it will be evaluated
-aMin = 100   # Minimum ratio of assets to income to plot
-aMax = 500 # Maximum ratio of assets to income to plot
-aPts = 100 # Number of points to plot 
+aMin = 000   # Minimum ratio of assets to income to plot
+aMax = 15 # Maximum ratio of assets to income to plot
+aPts = 1000 # Number of points to plot 
 
 eevalgrid = np.linspace(aMin,aMax,aPts)
 
 # Ages at which the plots will be generated
-ages = [20,30,55,75,99,100]
+ages = [20,75,99,100]
 
 # Plot our approximation at every age
 plt.figure()
@@ -82,7 +82,7 @@ for a in ages:
              MPC_approx,
              label = 'Age = %i' %(a))
     
-plt.axhline(MPC_lim, c='r', label = 'Merton Samuelson' ) # The Campbell-Viceira approximation
+plt.axhline(MPC_lim, c = 'k',ls='--', label = 'Merton Samuelson' )
 plt.legend()
 plt.title('MPC approximation: $c(m+1) - c(m)$')
 plt.xlabel('Market Resources $m$')
