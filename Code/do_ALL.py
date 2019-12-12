@@ -21,6 +21,10 @@ exec(open('Comparison/ComparePolFuncs.py').read())
 exec(open('Comparison/Compare_last_periods.py').read())
 # %% Appendix
 
-# 6. Compare HARK's policy functions at their limits with Merton's
+# 6. Compare HARK's risky share policy functions at their limits with Merton's
 # theoretical result.
 exec(open('Appendix/MertonSamuelson.py').read())
+
+# 7. Use HARK to compare the limiting MPC to the theoretical result obtained
+# when there is no income risk and no riskless asset.
+exec(open('Appendix/MPCLimit.py').read())
