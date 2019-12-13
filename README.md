@@ -5,4 +5,4 @@
 # A replication by Mateo Velásquez-Giraldo and Matthew Zahn.
 
 The following link launches a Jupyter notebook with the main results.
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matthew-zahn/CGMPort/develop?filepath=REMARK%2FCGM_REMARK.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matthew-zahn/CGMPort/feature/REMARK?filepath=REMARK%2FCGM_REMARK.ipynb)
