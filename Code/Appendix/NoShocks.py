@@ -32,8 +32,10 @@ dict_portfolio['PermShkStd'] = [0]*80
 dict_portfolio['TranShkStd'] = [0]*80
 
 # Make agent inifitely lived. Following parameter examples from ConsumptionSaving Notebook
-dict_portfolio['T_retire'] = 0 
+dict_portfolio['T_retire'] = 80 
 dict_portfolio['LivPrb'] = [0.98]*80
+
+dict_portfolio['PermGroFac'] = [1]*80
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
@@ -46,12 +48,12 @@ PFexample.solve()
 
 # Graphing values
 aMin = 0   # Minimum ratio of assets to income to plot
-aMax = 100  # Maximum ratio of assets to income to plot
+aMax = 200  # Maximum ratio of assets to income to plot
 aPts = 100 # Number of points to plot 
 
 eevalgrid = np.linspace(aMin,aMax,aPts) # range of values of assets for the plot
-#ages = [20,30,55,75]
-ages = [20]
+ages = [97,98,99,100]
+#ages = [20]
 age_born = time_params['Age_born']
 
 # Consumption Comparison -- Levels
@@ -107,15 +109,38 @@ plt.legend()
 plt.title('Consumption Comparisons by Age (Differences)')
 plt.show()
 
+# %% Sims
 
-ages = [20,30,55,75]
-age_born = time_params['Age_born']
-for a in ages:
-    plt.plot(eevalgrid,
-             agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[a-age_born]),
-             label = 'Age = %i' %(a))
-plt.ylim(0,1.05)
+# Set up the variables we want to keep track of.
+agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age','mNrmNow']
+PFexample.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow', 't_age','mNrmNow']
+
+agent.pLvlInitStd = 0.0001
+PFexample.pLvlInitStd = 0.0001
+
+agent.pLvlInitMean = 0.0
+PFexample.pLvlInitMean = 0.0
+
+agent.AgentCount = 1 
+agent.T_sim = 1
+
+PFexample.AgentCount = 1
+PFexample.T_sim = 1
+
+# Run the simulations
+agent.initializeSim()
+agent.simulate()
+
+# Run the simulations
+PFexample.initializeSim()
+PFexample.simulate()
+
+# Present diagnostic plots.
+plt.figure()
+plt.plot(agent.t_age_hist+time_params['Age_born'], agent.pLvlNow_hist,'.', label = 'port')
+plt.plot(PFexample.t_age_hist+time_params['Age_born'], PFexample.pLvlNow_hist,'.', label = 'PF')
+plt.xlabel('Age')
+plt.ylabel('Permanent income')
+plt.title('Simulated Income Paths')
 plt.legend()
-plt.title('Risky Portfolio Share by Age')
-plt.show()
-    
+plt.grid()
