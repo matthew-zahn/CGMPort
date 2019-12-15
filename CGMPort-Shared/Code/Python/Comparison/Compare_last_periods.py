@@ -27,7 +27,7 @@ years_comp = range(n_periods-10,n_periods)
 nyears = len(years_comp)
 
 # Path to fortran output
-pathFort = 'Fortran/'
+pathFort = '../Fortran/'
 
 # Asset grid
 npoints = 401

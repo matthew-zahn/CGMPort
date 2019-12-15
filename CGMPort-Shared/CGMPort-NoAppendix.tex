@@ -1,0 +1,87 @@
+\documentclass[./CGMPort.tex]{subfiles}\input{./econtexRoot}
+% Different execution depending on whether compiling main file or as standalone subfile
+\onlyinsubfile{\externaldocument{CGMPort}} % Get xrefs -- esp to appendix -- from main file; only works properly if main file has already been compiled; order: Compile this file, then main, then this one again
+\begin{document}
+
+\hfill{\tiny \texname.tex, \today}
+
+\begin{verbatimwrite}{BufferStockTheory.title}  % Write title to .title file
+Cocco, Gomes, and Maenhout (2005) REMARK
+\end{verbatimwrite}
+
+\title{Cocco, Gomes, and Maenhout (2005) \\ REMARK}
+
+\author{Mateo Vel\'asquez-Giraldo \and Matthew V. Zahn}
+
+\maketitle 
+
+\hypertarget{abstract}{}
+\begin{abstract}
+This paper contains the highlights from the REMARK file in Code>Python folder.
+\end{abstract}
+
+% Various resources 
+\hypertarget{links}{}
+\begin{small}
+\parbox{\textwidth}{
+\begin{center}
+\begin{tabbing}
+\texttt{~Archive:~} \= \= \url{http://econ.jhu.edu/people/ccarroll/BufferStockTheory.zip} \kill \\  %
+\texttt{~~GitHub:~} \> \> \url{http://github.com/econ-ark/REMARK/REMARKS/CGMPort} \\
+\texttt{~~~~~~~~~~} \> \> \textit{(In GitHub repo, see \texttt{/Code} for tools for solving and simulating the model)} \\
+\end{tabbing}
+\end{center}
+          
+\href{https://mybinder.org/v2/gh/matthew-zahn/CGMPort/develop?filepath=REMARK\%2FCGM_REMARK.ipynb}{CLICK HERE} for an interactive \href{https://en.wikipedia.org/wiki/Project\_Jupyter\#Jupyter_Notebook}{Jupyter Notebook} that uses the \href{https://econ-ark/HARK}{Econ-ARK/HARK} toolkit to produce all of the paper's figures (warning: it may take several minutes to launch).  Information about citing the toolkit can be found at \href{https://econ-ark.org/acknowledging/}{Acknowleding Econ-ARK}.
+} % end parbox{\textwidth}
+\end{small}
+
+\begin{authorsinfo}
+\name{Contact: \href{mailto:mvelasq2@jhu.edu}{\texttt{mvelasq2@jhu.edu}}, Department of Economics, 590 Wyman Hall, Johns Hopkins University, Baltimore, MD 21218, \url{https://t.co/uaflostQyF?amp=1}.}
+\name{Contact: \href{mailto:matthew.zahn@jhu.edu}{\texttt{matthew.zahn@jhu.edu}}, Department of Economics, 590 Wyman Hall, Johns Hopkins University, Baltimore, MD 21218, 
+\url{http://matthewvzahn.com/}.}
+\end{authorsinfo}
+
+\thanks{All numerical results herein were produced using the \href{https://econ-ark/HARK}{Econ-ARK/HARK} toolkit; for further reference options see \href{https://econ-ark.org/acknowledging/}{Acknowleding Econ-ARK}.  Thanks to Chris Carroll and Sylvain Catherine for comments and guidance.}
+
+\titlepagefinish
+
+\newtheorem{defn}{Definition}
+\newtheorem{theorem}{Theorem}
+
+\hypertarget{Introduction}{}
+\section{Introduction}
+
+
+\hypertarget{The-Problem}{}
+\section{The Problem}
+
+\subsection{Setup}
+\label{subsec:Setup}
+
+The consumer solves an optimization problem from period
+$t$ until the end of life at $T$ defined by the objective
+\begin{verbatimwrite}{\EqDir/supfn.tex}
+\begin{align}
+  \label{eq:supfn}
+  \max~ \Ex_{t}\left[\sum_{n=0}^{T-t} \DiscFac^{n} \uFunc(\cLevBF_{t+n})\right]
+\end{align}
+\end{verbatimwrite}
+\input{\EqDir/supfn.tex}
+where
+$\uFunc(\bullet)=\bullet^{1-\CRRA}/(1-\CRRA)$ is a constant relative
+risk aversion utility function with $\CRRA > 1$.\footnote{The main
+  results also hold for logarithmic utility which is the limit as
+  $\CRRA \rightarrow 1$ but incorporating the logarithmic special case
+  in the proofs is cumbersome and therefore
+  omitted.}$^{,}$\footnote{We will define the infinite horizon
+  solution as the limit of the finite horizon problem as the horizon
+  $T-t$ approaches infinity.}  The consumer's initial condition is
+defined by market resources $\mLevBF_{t}$ and permanent noncapital income $\pLevBF_{t}$.
+
+
+\clearpage\vfill\eject
+
+\onlyinsubfile{\bibliography{\econtexRoot/BufferStockTheory,economics}}
+
+\end{document}

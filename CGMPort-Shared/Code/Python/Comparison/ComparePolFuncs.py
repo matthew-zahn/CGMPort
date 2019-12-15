@@ -22,7 +22,7 @@ import seaborn
 # %% Setup
 
 # Path to fortran output
-pathFort = 'Fortran/'
+pathFort = '../Fortran/'
 
 # Asset grid
 npoints = 401
