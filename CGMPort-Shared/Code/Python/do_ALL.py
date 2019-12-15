@@ -1,12 +1,10 @@
 # %% Calibration assessment and life cycle simulations
 
 # 1. Solve the model and display its policy functions
-#exec(open('Simulations/PolicyFuncs.py').read())
 import Simulations.PolicyFuncs
 
 # 2. Simulate the lives of a few agents to show the implied income
 # and stockholding processes.
-#exec(open('Simulations/FewAgents.py').read())
 import Simulations.FewAgents
 
 # 3. Run a larger simulation to display the age conditional means of variables
