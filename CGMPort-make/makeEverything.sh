@@ -14,4 +14,4 @@ cd "$scriptDir"
 ./makeFiguresHARK.sh
 #./makeJournalStuff.sh
 ./makePDF-Shareable.sh
-./makePublic.sh ~/Papers/CGM update
+./makePublic.sh ~/Papers/CGMPort update
