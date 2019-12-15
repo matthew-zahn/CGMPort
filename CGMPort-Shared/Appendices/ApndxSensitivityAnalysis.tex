@@ -67,8 +67,8 @@ is unimportant for infinitely wealthy agents, our risky portfolio share policy r
 \subsection{Marginal Propensity to Consume}
 
 \href{http://www.econ2.jhu.edu/people/ccarroll/public/LectureNotes/Consumption/CRRA-RateRisk/}{CRRA-RateRisk}
-shows that an infinitely lived agent with no labor income and allocating
-his wealth between a risk-free and a risky asset with log-normally distributed
+shows that an infinitely lived agent with no labor income and who can only 
+store his wealth in a risky asset with log-normally distributed
 returns must have a marginal propensity to consume given by:
 \begin{equation}\label{eq:mpc_limit}
 	\kappa = 1 - \left( \beta \mathbb{E}_t \left[ \mathfrak{R}^{1-\rho} \right] 
@@ -76,7 +76,13 @@ returns must have a marginal propensity to consume given by:
 \end{equation}
 where $\mathfrak{R}$ is the risky asset's return factor.
 
-We modify our calibration to have log-normal returns and to ensure that Equation \ref{eq:mpc_limit} is a positive number. Since the result holds for infinitely lived consumers with no labor income, we should see that our estimated marginal propensity to consume converges to $\kappa$ for young and wealthy consumers. Figure \ref{fig:mpc_lim} shows that this is indeed the case.
+We modify our calibration to have log-normal returns and to ensure that 
+Equation \ref{eq:mpc_limit} is a positive number. We also set the risk free
+rate low enough that the agent will allocate all of his wealth to the risky
+asset. Since the result holds for infinitely lived consumers with no labor 
+income, we should see that our estimated marginal propensity to consume 
+converges to $\kappa$ for young and wealthy consumers. Figure \ref{fig:mpc_lim} 
+shows that this is indeed the case.
 
 \begin{figure}[h]
 	\includegraphics[]{\FigDirPython/MPC_Limit}
