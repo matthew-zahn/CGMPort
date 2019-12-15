@@ -19,7 +19,8 @@ agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
 # %% Set up figure path
-FigPath = '../Figures/'
+my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+FigPath = os.path.join(my_file_path,"Figures/")
 
 # %%
 # Plot portfolio rule

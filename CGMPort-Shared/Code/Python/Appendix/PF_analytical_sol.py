@@ -18,7 +18,8 @@ sys.path.append(os.path.realpath('../'))
 from Calibration.params import dict_portfolio, time_params
 
 # %% Set up figure path
-FigPath = '../Figures/'
+my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+FigPath = os.path.join(my_file_path,"Figures/")
 
 # %% Adjust parameters for portfolio tool
 # Adjust certain parameters to align with PF solution 

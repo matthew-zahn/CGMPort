@@ -19,7 +19,8 @@ from Calibration.params import dict_portfolio, time_params, norm_factor
 import matplotlib.pyplot as plt
 
 # %% Set up figure path
-FigPath = '../Figures/'
+my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+FigPath = os.path.join(my_file_path,"Figures/")
 
 # %% Setup
 
@@ -31,7 +32,7 @@ years_comp = range(n_periods-2,n_periods)
 nyears = len(years_comp)
 
 # Path to fortran output
-pathFort = '../../Fortran/'
+pathFort = os.path.join(my_file_path,"../Fortran/")
 
 # Asset grid
 npoints = 401

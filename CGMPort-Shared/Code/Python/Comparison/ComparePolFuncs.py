@@ -19,10 +19,14 @@ from Calibration.params import dict_portfolio, norm_factor
 import matplotlib.pyplot as plt
 import seaborn
 
+# %% Set up figure path
+my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+FigPath = os.path.join(my_file_path,"Figures/")
+
 # %% Setup
 
 # Path to fortran output
-pathFort = '../../Fortran/'
+pathFort = os.path.join(my_file_path,"../Fortran/")
 
 # Asset grid
 npoints = 401
@@ -36,9 +40,6 @@ nyears = dict_portfolio['T_cycle']
 cons  = np.zeros((nyears, npoints))
 val   = np.zeros((nyears, npoints))
 share = np.zeros((nyears, npoints))
-
-# %% Set up figure path
-FigPath = '../Figures/'
 
 # %% Read and split policy functions
 for year in range(nyears):
