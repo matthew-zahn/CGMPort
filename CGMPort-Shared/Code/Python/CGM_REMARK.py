@@ -23,7 +23,7 @@
 #
 #  This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the linked paper. The main HARK tool used here is the $\texttt{PortfolioConsumerType}$ class. For an introduction to this module, see the [ConsPortfolioModelDoc.ipynb](https://github.com/econ-ark/DemARK/blob/master/notebooks/ConsPortfolioModelDoc.ipynb) notebook.
 #
-#  __NOTES:__ This is a _preliminary draft_. Work is ongoing to refine the replicaition code and improve its presentation in this context.
+#  We thank Chris Carroll and Sylvain Catherine for comments and guidance
 
 # %%
 # This cell does some preliminary set up
@@ -207,7 +207,7 @@ norm_factor = det_income*np.exp(1)
 #
 # Analyzing the policy rule by age also shows that the risky share increases from young to middle age, and decreases from middle to old age. This is consistent with the previous interpretation: shares trace the humped shape of labor earnings.
 #
-# __[[Discuss how close these are to the paper and discuss differences.]]__
+# These estimates are different from what is produced in the original paper. Generally, the policy functions do not share the same curvature, which leads to greater reductions in the optimal portfolio share at lower levels of wealth.
 
 # %%
 # Plot portfolio rule
@@ -239,6 +239,8 @@ plt.grid()
 # The plot below shows the policy function for consumption as a function of wealth at different ages.
 #
 # At all age levels consumption increases with wealth. In the first phase of life (until approximately 35 to 40) the consumption function shifts upward as the agent ages, driven by permanent income increases. As the agent gets closer to retirement, their labor income profile becomes negatively sloped causing declines in consumption at some wealth levels.
+#
+# Our consumption policy functions lead to higher levels of consumption at all wealth levels relative to the original paper. Consumption also appears to increase with age in our policy functions that does not come through in the results presented in the paper. 
 
 # %%
 # Plot consumption function
@@ -265,7 +267,7 @@ plt.grid()
 #
 # We first run a few simulations to verify the quality of our calibration.
 #
-# The figures below show simulated levels of permanent income and risky portfolio shares for 100 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 20% once they reach retirement.
+# The figures below show simulated levels of permanent income and risky portfolio shares for 5 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 20% once they reach retirement.
 
 # %% A Simulation
 # Set up simulation parameters
@@ -304,7 +306,7 @@ plt.grid()
 #
 # We now increase the number of simulations to examine and compare the behavior of variable means. In each case we present the original plots from the paper for reference.
 #
-# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. __[[Agents appear to be accumulating too much market resources at the moment]]__
+# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. The plot follows the general pattern observed in the original paper. However, our results show that the agetns are accumulating significantly more market resources. 
 
 
 # %% Collect results in a DataFrame
@@ -399,11 +401,25 @@ plt.grid()
 # This article provides a dynamic model with accurate lifetime income profiles in which labor income increases risky asset holdings, as it is seen as a closer substitute of risk-free assets. It finds an optimal risky asset share that decreases in wealth and with age, after middle age. The model is also used to show that ignoring labor income for portfolio allocation can generate substantial welfare losses.
 
 # %% [markdown]
-# ### Puzzles/ Questions
+# ### Puzzles and Questions
 #
 # - Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
 # - The authors report taking the normalization $v_{i,t} = 1$. However the ranges of their results seem more consistent with $v_{i,t} = 0$ so that $\exp (v_{i,t}) = 1$, which also makes more sense for interpretation.
 #
+
+# %% [markdown]
+# ### Sensitivity Analyses
+#
+# Given the differences between our results and the original paper, we did a number of checks to ensure our model was behaving consistently with well-established theoretical results. Specifically we checked:
+# - For an infinitely lived agent with log normal returns, that their optimal portfolio allocation converges to the Campbell-Viceira (2002) approximation to the optimal portfolio share in Merton-Samuelson (1969) model.
+# - For an infinitely lived agent with no labor income that can only invest in a single risky asset, that their marginal propensity to consumer converges to the theoretical MPC of Merton-Samuelson (1969).
+# - For an agent facing no labor income risk, that their consumption matterns precisely match the results from a perfect foresight solution.
+#
+# In all three cases, we verified that our HARK model holds up to these results. More details and specific results are available upon request. 
+#
+# As the HARK toolkit continues to develop, there are additional sensitivities that we can perform to further check the credibility of our results. Specifically, once human wealth is available in the $\texttt{PortfolioConsumerType}$ class, we can perform the following additional checks:
+# - Shut down the income risk and remove retirement income. The solution to this new problem are provided by Merton 1971. Basically, you capitalize future earnings as an endowment of risk free asset. Then the equity share should be such that Equity/(Wealth+NPV of Human capital) is the same as the equity share in Merton 1969.
+# - Adding back the permanent income risk and check if the equity share is consistent with Viceira 2001. Viceira tells you something like this: $\pi = \frac{\mu - r}{\gamma \sigma^2_s} + \left(\frac{\mu - r}{\gamma \sigma^2_s} - \beta_{HC} \right) \frac{HC}{W}$, where $\beta_{HC} = \frac{\text{Cov}(r_{HC},r_s)}{\text{Var}(r_s)}$. In the CGM problem it is easy to compute $\beta_{HC}$ because earnings follow a simple random walk. HC is the NPV of human capital, which you can approximate very well by discounting expected earnings by $r+\beta_{HC}*(rm-r)$.
 
 # %% [markdown]
 # ### Bibliographic entry of the original article
