@@ -127,8 +127,8 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 #  | Parameter | Description | Code | Value |
 #  |:---:| ---         | ---  | :---: |
 #  | $\delta$ | Time Preference Factor | $\texttt{DiscFac}$ | 0.96 |
-#  | $\gamma$ | Coeﬃcient of Relative Risk Aversion| $\texttt{CRRA}$ | 10 |
-#  | $p_t$ | Survival Propility | $\texttt{LivPrb}$ | [0.6809,0.99845] |
+#  | $\gamma$ | Coefficient of Relative Risk Aversion| $\texttt{CRRA}$ | 10 |
+#  | $p_t$ | Survival Probability | $\texttt{LivPrb}$ | [0.6809,0.99845] |
 #  | $t_0$ | Starting Age | $\texttt{t_start}$ | 20 |
 #  | $t_r$ | Retirement Age | $\texttt{t_ret}$ | 65 |
 #  | $T$ | Maximum Age | $\texttt{t_end}$ | 100 |
