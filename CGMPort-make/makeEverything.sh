@@ -12,6 +12,6 @@ toolsDir=/Methods/Tools/Scripts # Extra tools
 cd "$scriptDir"
 
 ./makeFiguresHARK.sh
-./makeJournalStuff.sh
+#./makeJournalStuff.sh
 ./makePDF-Shareable.sh
 ./makePublic.sh ~/Papers/CGM update
