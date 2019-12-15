@@ -155,6 +155,13 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 #
 # For reference, the authors' source Fortran code that includes these paramerization details is available on [Gomes' personal page](http://faculty.london.edu/fgomes/research.html). Code that solves the model is also available in [Julia](https://github.com/econ-ark/HARK/issues/114#issuecomment-371891418).
 
+# %% [markdown]
+# ### Calibration in our implementation.
+#
+# We replicate the previously defined parameter values and transition processes for state variables and shocks, and format them into the structures required by HARK.
+#
+# This is done in the external file [Calibration/params.py](https://github.com/matthew-zahn/CGMPort/blob/master/CGMPort-Shared/Code/Python/Calibration/params.py), which we now import.
+
 # %%
 # Calibrate the model in line with the information above
 import sys,os
@@ -163,6 +170,9 @@ sys.path.append(os.path.realpath('Calibration/'))
 # Loading the parameters from the Calibration/params.py script
 from params import dict_portfolio, time_params, det_income
 
+
+# %% [markdown]
+# All of the model's parameters are contained in the structure <tt>dict_portfolio<tt>, which can now be passed to HARK's <tt>PortfolioConsumerType<tt> to build and solve a representation of our problem.  
 
 # %%
 # Solve the model with the given parameters
@@ -187,14 +197,21 @@ agent.solve()
 # \hat{X_{i,t}} = \frac{X_{i,t}}{P_{i,t}} = \frac{X_{i,t}}{\exp (f(t,Z_{i,t}) + v_{i,t})}.
 # \end{equation}
 #
-# Therefore, to present our results in a way consistent with that of the original authors, we use the following relationship
+# Therefore, to present our results in a way consistent with that of the original authors, we would use the following relationship
 # \begin{equation}
 # \tilde{X_{i,t}} = \hat{X_{i,t}} \times \exp (f(t,Z_{i,t})+1)
 # \end{equation}
+#
+# However, our results are much more consistent with those of the original authors when we take the normalization $v_{i,t} = 0$, which also make sense since it makes the random-walk multiplicative part of permanent income $\exp{v_{i,t}}=1$. We therefore assume this is a typo, take $v_{i,t} = 0$, document this issue in the \textbf{Puzzles} section below, and use the relationship
+# \begin{equation}
+# \tilde{X_{i,t}} = \hat{X_{i,t}} \times \exp (f(t,Z_{i,t})).
+# \end{equation}
+#
+# The next cell defines our normalization factor
 
 # %%
 # Define a normalization factor
-norm_factor = det_income*np.exp(1)
+norm_factor = det_income*np.exp(0)
 
 # %% [markdown]
 # ### Key Results
@@ -207,7 +224,7 @@ norm_factor = det_income*np.exp(1)
 #
 # Analyzing the policy rule by age also shows that the risky share increases from young to middle age, and decreases from middle to old age. This is consistent with the previous interpretation: shares trace the humped shape of labor earnings.
 #
-# These estimates are different from what is produced in the original paper. Generally, the policy functions do not share the same curvature, which leads to greater reductions in the optimal portfolio share at lower levels of wealth.
+# These estimates are different from what is produced in the original paper, which are also reproduced below. Generally, the policy functions do not share the same curvature, which leads to greater reductions in the optimal portfolio share at lower levels of wealth.
 
 # %%
 # Plot portfolio rule
@@ -238,9 +255,9 @@ plt.grid()
 #
 # The plot below shows the policy function for consumption as a function of wealth at different ages.
 #
-# At all age levels consumption increases with wealth. In the first phase of life (until approximately 35 to 40) the consumption function shifts upward as the agent ages, driven by permanent income increases. As the agent gets closer to retirement, their labor income profile becomes negatively sloped causing declines in consumption at some wealth levels.
+# At all age levels consumption increases with wealth. The consumption function also appears to shift upwards as life progresses.
 #
-# Our consumption policy functions lead to higher levels of consumption at all wealth levels relative to the original paper. Consumption also appears to increase with age in our policy functions that does not come through in the results presented in the paper. 
+# Our consumption policy functions again do not match those of the original paper, which are also reproduced below. Consumption also appears to increase with age in our policy functions that does not come through in the results presented in the paper. 
 
 # %%
 # Plot consumption function
@@ -267,7 +284,7 @@ plt.grid()
 #
 # We first run a few simulations to verify the quality of our calibration.
 #
-# The figures below show simulated levels of permanent income and risky portfolio shares for 5 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 20% once they reach retirement.
+# The figures below show simulated levels of permanent income and risky portfolio shares for 5 agents over their life spans. We can see the model generates a heterogeneous permanent income distribution. Interestingly, all of these agents tend to follow the same general pattern for investing in the risky asset. Early in life, all of their portfolios are invested in the risky asset. This declines as the agent ages and converges to approximately 35% once they reach retirement.
 
 # %% A Simulation
 # Set up simulation parameters
@@ -304,9 +321,9 @@ plt.grid()
 # %% [markdown]
 # #### The average life cycle patterns
 #
-# We now increase the number of simulations to examine and compare the behavior of variable means. In each case we present the original plots from the paper for reference.
+# We now increase the number of simulations to examine and compare the behavior of the mean values of variables of interest at different ages, conditional on survival. In each case we present the original plots from the paper for reference.
 #
-# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. The plot follows the general pattern observed in the original paper. However, our results show that the agetns are accumulating significantly more market resources. 
+# The plot below illustrates the average dynamics of permanent income, consumption, and market resources across all of the simulated agents. The plot follows the general pattern observed in the original paper. However, our results show that the agents are accumulating significantly more market resources. 
 
 
 # %% Collect results in a DataFrame
@@ -386,7 +403,7 @@ plt.grid()
 #
 # #### Heterogeneity and sensitivity analysis
 #
-# The authors also considered a number of extensions to the baseline model. These are summaried below along with their main conclusions.
+# The authors also considered a number of extensions to the baseline model. These are summarized below along with their main conclusions.
 #
 # - Labor income risk: Income risk may vary across employment sectors relative to the baseline model. The authors examine extreme cases for industries that have a large standard deviation and temporary income shocks. While some differences appear across sectors, the results are generally in line with the baseline model.
 # - Disastrous labor income shocks: The authors find that even a small probability of zero labor income lowers the optimal portfolio allocation in stocks, while the qualitative features of the baseline model are preserved.
@@ -408,16 +425,16 @@ plt.grid()
 #
 
 # %% [markdown]
-# ### Sensitivity Analyses
+# ### Robustness Analyses
 #
 # Given the differences between our results and the original paper, we did a number of checks to ensure our model was behaving consistently with well-established theoretical results. Specifically we checked:
 # - For an infinitely lived agent with log normal returns, that their optimal portfolio allocation converges to the Campbell-Viceira (2002) approximation to the optimal portfolio share in Merton-Samuelson (1969) model.
 # - For an infinitely lived agent with no labor income that can only invest in a single risky asset, that their marginal propensity to consumer converges to the theoretical MPC of Merton-Samuelson (1969).
-# - For an agent facing no labor income risk, that their consumption matterns precisely match the results from a perfect foresight solution.
+# - For an agent facing no labor income risk, that their consumption patterns precisely match the results from a perfect foresight solution.
 #
 # In all three cases, we verified that our HARK model holds up to these results. More details and specific results are available upon request. 
 #
-# As the HARK toolkit continues to develop, there are additional sensitivities that we can perform to further check the credibility of our results. Specifically, once human wealth is available in the $\texttt{PortfolioConsumerType}$ class, we can perform the following additional checks:
+# As the HARK toolkit continues to develop, there are additional sensitivities that we can perform to further check the credibility of our results. Specifically, once human wealth is available in the $\texttt{PortfolioConsumerType}$ class, we can perform the following additional checks, which were kindly suggested by Professor Sylvain Catherine:
 # - Shut down the income risk and remove retirement income. The solution to this new problem are provided by Merton 1971. Basically, you capitalize future earnings as an endowment of risk free asset. Then the equity share should be such that Equity/(Wealth+NPV of Human capital) is the same as the equity share in Merton 1969.
 # - Adding back the permanent income risk and check if the equity share is consistent with Viceira 2001. Viceira tells you something like this: $\pi = \frac{\mu - r}{\gamma \sigma^2_s} + \left(\frac{\mu - r}{\gamma \sigma^2_s} - \beta_{HC} \right) \frac{HC}{W}$, where $\beta_{HC} = \frac{\text{Cov}(r_{HC},r_s)}{\text{Var}(r_s)}$. In the CGM problem it is easy to compute $\beta_{HC}$ because earnings follow a simple random walk. HC is the NPV of human capital, which you can approximate very well by discounting expected earnings by $r+\beta_{HC}*(rm-r)$.
 
