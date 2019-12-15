@@ -28,3 +28,7 @@ exec(open('Appendix/MertonSamuelson.py').read())
 # 7. Use HARK to compare the limiting MPC to the theoretical result obtained
 # when there is no income risk and no riskless asset.
 exec(open('Appendix/MPCLimit.py').read())
+
+# 8. Turn off all shocks and check if consumption converges to its analytical
+# perfect foresight solution
+exec(open('Appendix/PF_analytical_sol.py').read())
