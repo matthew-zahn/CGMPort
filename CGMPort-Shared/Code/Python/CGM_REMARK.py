@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.3
+#       jupytext_version: 1.2.4
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -159,8 +159,8 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 # Calibrate the model in line with the information above
 import sys,os
 # The following code navigates to another directory where a python script with the parameters for the model is saved.
-sys.path.append(os.path.realpath('../Code/Calibration')) 
-# Loading the parameters from the ../Code/Calibration/params.py script
+sys.path.append(os.path.realpath('Calibration/')) 
+# Loading the parameters from the Calibration/params.py script
 from params import dict_portfolio, time_params, det_income
 
 
