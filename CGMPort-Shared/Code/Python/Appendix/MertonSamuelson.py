@@ -28,6 +28,9 @@ dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
+# %% Set up figure path
+FigPath = '../Figures/'
+
 # %%
 
 aMin = 0   # Minimum ratio of assets to income to plot
@@ -37,14 +40,6 @@ aPts = 1000 # Number of points to plot
 # Campbell-Viceira (2002) approximation to optimal portfolio share in Merton-Samuelson (1969) model
 agent.MertSamCampVicShare = agent.RiskyShareLimitFunc(RiskyDstnFunc(dict_portfolio['RiskyCount']))
 eevalgrid = np.linspace(0,aMax,aPts) # range of values of assets for the plot
-
-# Overall plot
-plt.plot(eevalgrid, agent.solution[0].RiskyShareFunc[0][0](eevalgrid))
-plt.axhline(agent.MertSamCampVicShare, c='r') # The Campbell-Viceira approximation
-plt.ylim(0,1.05)
-plt.text((aMax-aMin)/4,0.15,r'$\uparrow $ limit as  $m \uparrow \infty$',fontsize = 22,fontweight='bold')
-plt.title('Risky Portfolio Share')
-plt.show()
 
 # Plot by ages
 ages = [20,30,55,75]
@@ -58,12 +53,10 @@ plt.ylim(0,1.05)
 plt.text((aMax-aMin)/4,0.15,r'$\uparrow $ limit as  $m \uparrow \infty$',fontsize = 22,fontweight='bold')
 plt.legend()
 plt.title('Risky Portfolio Share by Age')
-plt.show()
 
-# Plot for the second to last period of life
-plt.plot(eevalgrid, agent.solution[79].RiskyShareFunc[0][0](eevalgrid/norm_factor[79-age_born]))
-plt.axhline(agent.MertSamCampVicShare, c='r') # The Campbell-Viceira approximation
-plt.ylim(0,1.05)
-plt.text((aMax-aMin)/4,0.15,r'$\uparrow $ limit as  $m \uparrow \infty$',fontsize = 22,fontweight='bold')
-plt.title('Risky Portfolio Share - Second to Last Period')
-plt.show()
+# Save figure
+figname = 'Merton_Samuelson_Limit'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

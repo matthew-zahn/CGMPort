@@ -10,30 +10,32 @@ import numpy as np
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
 # Since the calibration is in another folder, we need to add it to the path.
-import sys
+import sys, os
 sys.path.append('../')
+sys.path.append('../../')
 from Calibration.params import dict_portfolio, time_params, norm_factor
 
 # Plotting tools
 import matplotlib.pyplot as plt
 
+# %% Set up figure path
+FigPath = '../Figures/'
+
 # %% Setup
 
 # Years to compare
 n_periods = time_params['Age_death'] - time_params['Age_born']
-years_comp = range(n_periods-10,n_periods)
+years_comp = range(n_periods-2,n_periods)
 
 # Number of years
 nyears = len(years_comp)
 
 # Path to fortran output
-pathFort = '../Fortran/'
+pathFort = '../../Fortran/'
 
 # Asset grid
 npoints = 401
 agrid = np.linspace(4,npoints+3,npoints)
-
-
 
 # Initialize consumption, value, and share matrices
 # (rows = age, cols = assets)
@@ -108,7 +110,14 @@ for i in range(len(years_comp)):
      axes[1,1].set_title('Risky Sh. Difference')
      axes[1,1].grid()
      
-     f.suptitle('Year ' + str(year))
+     f.suptitle('Year ' + str(year + time_params['Age_born']))
+     
+     # Save figure
+     figname = 'PolFunc_Compare_Y' + str(year + time_params['Age_born'])
+     plt.savefig(os.path.join(FigPath, figname + '.png'))
+     plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+     plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+     plt.savefig(os.path.join(FigPath, figname + '.svg'))
      
 cons_error   = h_cons - cons
 share_error = h_share - share

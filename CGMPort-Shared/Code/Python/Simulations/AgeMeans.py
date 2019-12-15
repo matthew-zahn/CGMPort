@@ -13,10 +13,13 @@ import pandas as pd
 import sys,os
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
-from Calibration.params import dict_portfolio, time_params, det_income
+from Calibration.params import dict_portfolio, time_params
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
+
+# %% Set up figure path
+FigPath = '../Figures/'
 
 # %% Run simulation and store results in a data frame
 
@@ -25,7 +28,7 @@ agent.AgentCount = 50 # Number of instances of the class to be simulated.
 # Since agents can die, they are replaced by a new agent whenever they do.
 
 # Number of periods to be simulated
-agent.T_sim = 80*50
+agent.T_sim = agent.T_cycle*50
 
 # Set up the variables we want to keep track of.
 agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow',
@@ -63,6 +66,13 @@ plt.xlabel('Age')
 plt.title('Variable Means Conditional on Survival')
 plt.grid()
 
+# Save figure
+figname = 'YMC_Means'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
 # %% Risky Share
 
 # Find age percentiles
@@ -79,3 +89,10 @@ plt.xlabel('Age')
 plt.ylabel('Risky Share')
 plt.title('Risky Portfolio Share Mean Conditional on Survival')
 plt.grid()
+
+# Save figure
+figname = 'RShare_Means'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

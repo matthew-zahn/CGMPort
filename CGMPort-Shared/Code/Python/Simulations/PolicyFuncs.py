@@ -18,6 +18,9 @@ from Calibration.params import dict_portfolio, time_params, norm_factor
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
+# %% Set up figure path
+FigPath = '../Figures/'
+
 # %%
 # Plot portfolio rule
 eevalgrid = np.linspace(0,300,100)
@@ -37,6 +40,14 @@ plt.ylabel('Risky portfolio share')
 plt.legend()
 plt.grid()
 
+# Save figure
+figname = 'RShare_Pol'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
+
 # Plot consumption function
 plt.figure()
 ages = [20,35,65,85]
@@ -48,3 +59,10 @@ plt.xlabel('Wealth')
 plt.ylabel('Consumption')
 plt.legend()
 plt.grid()
+
+# Save figure
+figname = 'Cons_Pol'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

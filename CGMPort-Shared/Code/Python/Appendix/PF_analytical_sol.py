@@ -17,6 +17,9 @@ sys.path.append(os.path.realpath('../'))
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params
 
+# %% Set up figure path
+FigPath = '../Figures/'
+
 # %% Adjust parameters for portfolio tool
 # Adjust certain parameters to align with PF solution 
 # No risky asset (Overwriting Normal returns defined in params)
@@ -95,13 +98,20 @@ for i in range(len(ages)):
     
     # Label
     axs[i].set_title('Age = ' + str(age))
+    
+    axs[i].grid()
 
 axs[-1].legend()
 
 for ax in axs.flat:
     ax.set(xlabel='M', ylabel='C')
 
-plt.show()
+# Save figure
+figname = 'PF_Compare_Lvl'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
 
 # %% Differences plots
 
@@ -114,8 +124,11 @@ for a in ages:
     c_true = true_cFunc(a-age_born + 1, agrid )
     
     axs[0].plot(agrid, cPort-c_true, label = 'Age = %i' %(a))
+    axs[0].grid()
+    
     axs[1].plot(agrid, cPF-c_true, label = 'Age = %i' %(a))
-
+    axs[1].grid()
+    
 axs[0].set_title('PortfolioConsumerType', y = 1.05)
 axs[1].set_title('PerfForesightConsumerType', y = 1.05)
 
@@ -126,6 +139,10 @@ for ax in axs.flat:
     ax.set(xlabel='M', ylabel='C')
 
 fig.tight_layout(rect=[0, 0.05, 1, 0.95])
-plt.show()
 
-plt.show()
+# Save figure
+figname = 'PF_Compare_Diff'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

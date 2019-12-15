@@ -2,7 +2,6 @@
 # result in 
 # http://www.econ2.jhu.edu/people/ccarroll/public/LectureNotes/Consumption/CRRA-RateRisk.pdf
 
-
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +14,11 @@ import sys,os
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params
+
+# %% Set up figure path
+FigPath = '../Figures/'
+
+# %% Setup
 
 # Adjust certain parameters to get the Merton-Samuelson result
 
@@ -86,3 +90,10 @@ plt.axhline(MPC_lim, c = 'k',ls='--', label = 'Merton Samuelson' )
 plt.legend()
 plt.title('MPC approximation: $c(m+1) - c(m)$')
 plt.xlabel('Market Resources $m$')
+
+# Save figure
+figname = 'MPC_Limit'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

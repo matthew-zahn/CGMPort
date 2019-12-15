@@ -10,32 +10,35 @@ import numpy as np
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
 # Since the calibration is in another folder, we need to add it to the path.
-import sys
+import sys, os
 sys.path.append('../')
-from Calibration.params import dict_portfolio, time_params, norm_factor
+sys.path.append('../../')
+from Calibration.params import dict_portfolio, norm_factor
 
 # Plotting tools
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import seaborn
 
 # %% Setup
 
 # Path to fortran output
-pathFort = '../Fortran/'
+pathFort = '../../Fortran/'
 
 # Asset grid
 npoints = 401
 agrid = np.linspace(4,npoints+3,npoints)
 
 # number of years
-nyears = 80
+nyears = dict_portfolio['T_cycle']
 
 # Initialize consumption, value, and share matrices
 # (rows = age, cols = assets)
 cons  = np.zeros((nyears, npoints))
 val   = np.zeros((nyears, npoints))
 share = np.zeros((nyears, npoints))
+
+# %% Set up figure path
+FigPath = '../Figures/'
 
 # %% Read and split policy functions
 for year in range(nyears):
@@ -102,6 +105,13 @@ f.suptitle('$C(\cdot)$')
 f.tight_layout()
 f.subplots_adjust(top=0.8)
 
+# Save figure
+figname = 'Cons_Pol_Compare'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
 # Risky share
 f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
 seaborn.despine(left=True)
@@ -125,3 +135,10 @@ f.suptitle('$S(\cdot)$')
 
 f.tight_layout()
 f.subplots_adjust(top=0.8)
+
+# Save figure
+figname = 'RShare_Pol_Compare'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
