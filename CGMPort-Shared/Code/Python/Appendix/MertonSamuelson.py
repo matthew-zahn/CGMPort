@@ -9,8 +9,22 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Import parameters from external file
+# %% Set up figure path
 import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
+FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% Calibration and solution
+
+# Import parameters from external file
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params, det_income, Mu, Rfree, Std, norm_factor
@@ -28,10 +42,6 @@ dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
 
-# %% Set up figure path
-my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
-FigPath = os.path.join(my_file_path,"Figures/")
-
 # %%
 
 aMin = 0   # Minimum ratio of assets to income to plot
@@ -45,6 +55,7 @@ eevalgrid = np.linspace(0,aMax,aPts) # range of values of assets for the plot
 # Plot by ages
 ages = [20,30,55,75]
 age_born = time_params['Age_born']
+plt.figure()
 for a in ages:
     plt.plot(eevalgrid,
              agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[a-age_born]),

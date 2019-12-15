@@ -9,19 +9,26 @@ import numpy as np
 
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
-# Since the calibration is in another folder, we need to add it to the path.
-import sys, os
-sys.path.append('../')
-sys.path.append('../../')
-from Calibration.params import dict_portfolio, norm_factor
-
 # Plotting tools
 import matplotlib.pyplot as plt
 import seaborn
 
 # %% Set up figure path
-my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
 FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% import Calibration
+sys.path.append('../')
+from Calibration.params import dict_portfolio, norm_factor
 
 # %% Setup
 

@@ -11,15 +11,24 @@ from HARK.utilities import plotFuncs
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Import parameters from external file
+# %% Set up figure path
 import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
+FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% Import calibration
+# Import parameters from external file
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params
-
-# %% Set up figure path
-my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
-FigPath = os.path.join(my_file_path,"Figures/")
 
 # %% Adjust parameters for portfolio tool
 # Adjust certain parameters to align with PF solution 

@@ -9,18 +9,26 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# %% Calibration and solution
+# %% Set up figure path
 import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
+FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% Calibration and solution
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params
 
 agent = cpm.PortfolioConsumerType(**dict_portfolio)
 agent.solve()
-
-# %% Set up figure path
-my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
-FigPath = os.path.join(my_file_path,"Figures/")
 
 # %% Run simulation and store results in a data frame
 
