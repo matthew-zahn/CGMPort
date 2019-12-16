@@ -9,6 +9,8 @@ import numpy as np
 from HARK.utilities import approxLognormal
 from HARK.simulation import drawLognormal
 
+from copy import copy
+
 # %% Set up figure path
 import sys,os
 
@@ -32,12 +34,15 @@ from Calibration.params import dict_portfolio, time_params
 
 # Adjust certain parameters to get the Merton-Samuelson result
 
+# Make new dictionary
+mpc_dict = copy(dict_portfolio)
+
 # Make riskless return factor very low so that nobody invests in it.
-dict_portfolio['Rfree'] = 0.01
+mpc_dict['Rfree'] = 0.01
 # Make the agent less risk averse
-dict_portfolio['CRRA'] = 2
+mpc_dict['CRRA'] = 2
 # Do away with probability of death
-dict_portfolio['LivPrb'] = [1]*dict_portfolio['T_cycle']
+mpc_dict['LivPrb'] = [1]*dict_portfolio['T_cycle']
 
 # Risky returns
 mu = 0.05
@@ -48,10 +53,10 @@ RiskyDstnFunc = lambda count: approxLognormal(count, mu = mu, sigma = std)
 # Contruct function for drawing returns
 RiskyDrawFunc = lambda seed: drawLognormal(1, mu = mu, sigma = std, seed = seed)
 
-dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
-dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
+mpc_dict['approxRiskyDstn'] = RiskyDstnFunc
+mpc_dict['drawRiskyFunc'] = RiskyDrawFunc
 
-agent = cpm.PortfolioConsumerType(**dict_portfolio)
+agent = cpm.PortfolioConsumerType(**mpc_dict)
 agent.cylces = 0
 agent.solve()
 
