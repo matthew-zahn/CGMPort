@@ -14,7 +14,9 @@ figures produced in this section use the policy functions outputted by the
 author's code after this fix. 
 
 Figures \ref{fig:heatmapCons} and \ref{fig:heatmapRshare} display policy 
-functions for consumption and risky portfolio shares obtained with CGM's code and our HARK implementation, and their substantial differences.
+functions for consumption and risky portfolio shares obtained with 
+\cite{cgm2015}'s code and our HARK implementation, and their substantial 
+differences.
 
 \begin{figure}[h]
 	\includegraphics[width = \linewidth]{\FigDirPython/Cons_Pol_Compare}
@@ -43,9 +45,9 @@ Given the differences, we inspect the second and third-to-last life periods more
 Given that our main set of results do not align with those of \cite{cgm2015},
 we provide a few tests that compare the behavior of the tools that we are using with well known theoretical results.
 
-\subsection{Merton Samuelson's limiting risky share}
+\subsection{Merton-Samuelson's limiting risky share}
 
-Merton and Samuelson (TODO: CITE) show that a consumer with constant relative
+\cite{merton,samuelson} show that a consumer with constant relative
 risk aversion $\rho$, a risky asset with log-normally distributed returns
 with a risk premium $\phi$ and log-standard-deviation $\sigma_r$, and no labor income uncertainty will invest the following share of their income:\footnote{See 
 \href{http://www.econ2.jhu.edu/people/ccarroll/public/lecturenotes/AssetPricing/Portfolio-CRRA/}{\texttt{Portfolio-CRRA}}.}
