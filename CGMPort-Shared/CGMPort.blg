@@ -1,5 +1,0 @@
-[1] Config.pm:304> INFO - This is Biber 2.14
-[1] Config.pm:307> INFO - Logfile is 'CGMPort.blg'
-[230] biber-MSWIN64:322> INFO - === 
-[1352] Utils.pm:320> ERROR - Cannot find 'CGMPort.bcf'!
-[1353] Biber.pm:132> INFO - ERRORS: 1
