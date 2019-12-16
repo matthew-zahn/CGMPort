@@ -9,6 +9,7 @@ import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
 
+from copy import copy
 # %% Set up figure path
 import sys,os
 
@@ -29,6 +30,9 @@ sys.path.append(os.path.realpath('../'))
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params, det_income, Mu, Rfree, Std, norm_factor
 
+# Create new dictionary
+merton_dict = copy(dict_portfolio)
+
 # Adjust certain parameters to align with Merton-Samuleson
 # Log normal returns (Overwriting Noramal returns defined in params)
 mu = Mu + Rfree
@@ -36,10 +40,10 @@ RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=mu, RiskyStd=Std) # Generates node
 RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=mu, RiskyStd=Std) # Generates draws from the "true" distribution
 
 # Make agent inifitely lived. Following parameter examples from ConsumptionSaving Notebook
-dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
-dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
+merton_dict['approxRiskyDstn'] = RiskyDstnFunc
+merton_dict['drawRiskyFunc'] = RiskyDrawFunc
 
-agent = cpm.PortfolioConsumerType(**dict_portfolio)
+agent = cpm.PortfolioConsumerType(**merton_dict)
 agent.solve()
 
 # %%
@@ -49,7 +53,7 @@ aMax = 1e5  # Maximum ratio of assets to income to plot
 aPts = 1000 # Number of points to plot 
 
 # Campbell-Viceira (2002) approximation to optimal portfolio share in Merton-Samuelson (1969) model
-agent.MertSamCampVicShare = agent.RiskyShareLimitFunc(RiskyDstnFunc(dict_portfolio['RiskyCount']))
+agent.MertSamCampVicShare = agent.RiskyShareLimitFunc(RiskyDstnFunc(merton_dict['RiskyCount']))
 eevalgrid = np.linspace(0,aMax,aPts) # range of values of assets for the plot
 
 # Plot by ages

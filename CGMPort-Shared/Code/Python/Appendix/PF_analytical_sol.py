@@ -10,6 +10,7 @@ import HARK.ConsumptionSaving.ConsIndShockModel as cis
 from HARK.utilities import plotFuncs
 import matplotlib.pyplot as plt
 import numpy as np
+from copy import copy
 
 # %% Set up figure path
 import sys,os
@@ -31,7 +32,11 @@ sys.path.append(os.path.realpath('../'))
 from Calibration.params import dict_portfolio, time_params
 
 # %% Adjust parameters for portfolio tool
-# Adjust certain parameters to align with PF solution 
+
+# Create a new calibration dictionary
+pf_dict = copy(dict_portfolio)
+
+
 # No risky asset (Overwriting Normal returns defined in params)
 mu = 1
 Std = 0
@@ -39,36 +44,36 @@ Std = 0
 # Turn off rate shocks
 RiskyDstnFunc = cpm.RiskyDstnFactory(RiskyAvg=mu, RiskyStd=Std) # Generates nodes for integration
 RiskyDrawFunc = cpm.LogNormalRiskyDstnDraw(RiskyAvg=mu, RiskyStd=Std) # Generates draws from the "true" distribution
-dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
-dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
+pf_dict['approxRiskyDstn'] = RiskyDstnFunc
+pf_dict['drawRiskyFunc'] = RiskyDrawFunc
 
 # No income shocks
-dict_portfolio['PermShkStd'] = [0]*80
-dict_portfolio['TranShkStd'] = [0]*80
+pf_dict['PermShkStd'] = [0]*80
+pf_dict['TranShkStd'] = [0]*80
 
 # Make agent live for sure until the terminal period
-dict_portfolio['T_retire'] = 80 
-dict_portfolio['LivPrb'] = [1]*80
+pf_dict['T_retire'] = 80 
+pf_dict['LivPrb'] = [1]*80
 
 # Shut down income growth
-dict_portfolio['PermGroFac'] = [1]*80
+pf_dict['PermGroFac'] = [1]*80
 
 # Decrease grid for speed
-dict_portfolio['aXtraCount'] = 100
+pf_dict['aXtraCount'] = 100
 
 # %% Create both agents
-port_agent = cpm.PortfolioConsumerType(**dict_portfolio)
+port_agent = cpm.PortfolioConsumerType(**pf_dict)
 port_agent.solve()
 
-pf_agent = cis.PerfForesightConsumerType(**dict_portfolio)
+pf_agent = cis.PerfForesightConsumerType(**pf_dict)
 pf_agent.solve()
 
 # %% Construct the analytical solution
 
-rho  = dict_portfolio['CRRA']
-R    = dict_portfolio['Rfree']
-Beta = dict_portfolio['DiscFac']
-T    = dict_portfolio['T_cycle'] + 1
+rho  = pf_dict['CRRA']
+R    = pf_dict['Rfree']
+Beta = pf_dict['DiscFac']
+T    = pf_dict['T_cycle'] + 1
 
 thorn_r = (R*Beta)**(1/rho)/R
 
