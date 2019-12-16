@@ -68,8 +68,13 @@ The problem of an agent $i$ of age $t$ in the base model is recursively represen
 	\end{align}
 \end{verbatimwrite}
 \input{\EqDir/DynProb.tex}
-
-where $C_{i,t}$ is consumption, $\alpha_{i,t}$ is the share of savings allocated to the risky asset, $Y_{i,t}$ is labor income, and $X_{i,t}$ represents wealth. The utility function $U(\cdot)$ is assumed to be CRRA in the base model. Extensions beyond the baseline model include an additively separable bequest motive in the utility function. The discount factor is $\delta$ and $p_t$ is the probability of survival from $t$ to $t+1$. Death is certain at a maximum period $T$.
+where $C_{i,t}$ is consumption, $\alpha_{i,t}$ is the share of savings 
+allocated to the risky asset, $Y_{i,t}$ is labor income, and $X_{i,t}$ 
+represents wealth. The utility function $U(\cdot)$ is assumed to be CRRA in the 
+base model. Extensions beyond the baseline model include an additively 
+separable bequest motive in the utility function. The discount factor is 
+$\delta$ and $p_t$ is the probability of survival from $t$ to $t+1$. Death is 
+certain at a maximum period $T$.
 
 Note that the consumer cannot borrow or short-sell.
 
@@ -77,19 +82,21 @@ The control variables in the problem are $\{C_{it}, \alpha_{it}\}^T_{t=1}$ and t
 
 \subsection{Labor income}
 
-An important driver of the paper's results is the labor income process. It is specified as follows:
-
+An important driver of the paper's results is the labor income process. It is 
+specified as follows:
 \begin{equation}
 \log Y_{i,t} = f(t,Z_{i,t}) + v_{i,t} + \epsilon_{i,t}, \quad \text{for } t\leq K.
 \end{equation}
-
-where $K$ is the (exogenous) age of retirement, $Z_{i,t}$ are demographic characteristics, $\epsilon_{i,t}\sim \mathcal{N}(0,\sigma^2_\epsilon)$ is a transitory shock, and  $v_{i,t}$ is a permanent component following a random walk
-
+where $K$ is the (exogenous) age of retirement, $Z_{i,t}$ are demographic 
+characteristics, $\epsilon_{i,t}\sim \mathcal{N}(0,\sigma^2_\epsilon)$ is a 
+transitory shock, and  $v_{i,t}$ is a permanent component following a random 
+walk
 \begin{equation}
 v_{i,t} = v_{i,t-1} + u_{i,t} = v_{i,t-1} + \xi_t + \omega_{i,t}
 \end{equation}
-
-in which the innovation is decomposed into an aggregate ($\xi_t$) and an idiosyncratic component ($\omega_{i,t}$), both following mean-0 normal distributions.
+in which the innovation is decomposed into an aggregate ($\xi_t$) and an 
+idiosyncratic component ($\omega_{i,t}$), both following mean-0 normal 
+distributions.
 
 Post-retirement income is a constant fraction $\lambda$ of permanent income in the last working year $K$.
 
@@ -115,10 +122,10 @@ To represent the author's assumptions in HARK, we express both income processes 
 \end{align}
 
 These representations make evident the mapping that we use
-
 \input{\econtexRoot/\TableDir/Mapping.tex}
-
-and to achieve a retirement income that is equal to a fraction $\lambda$ of permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = \lambda$ and $\Gamma_{t} = 1$ $\forall t>K+1$.
+and to achieve a retirement income that is equal to a fraction $\lambda$ of 
+permanent income in the last working period $K$, we simply make $\Gamma_{K+1} = 
+\lambda$ and $\Gamma_{t} = 1$ $\forall t>K+1$.
 
 \subsection{Assets and their returns}
 
@@ -282,7 +289,8 @@ This article provides a dynamic model with accurate lifetime income profiles in 
 \hypertarget{Puzzles-and-Questions}{}
 \section{Puzzles and Questions}\label{sec:Puzzles}
 \begin{itemize}
-	\item Table 4 says stock returns are $0.06$. They might mean that the equity premium $\mu$ is $0.06$.
+	\item Table 4 in the main text says stock returns are $0.06$. They might 
+	mean that the equity premium $\mu$ is $0.06$.
 	\item The authors report taking the normalization $v_{i,t} = 1$. However the ranges of their results seem more consistent with $v_{i,t} = 0$ so that $\exp (v_{i,t}) = 1$, which also makes more sense for interpretation.
 \end{itemize}
 
