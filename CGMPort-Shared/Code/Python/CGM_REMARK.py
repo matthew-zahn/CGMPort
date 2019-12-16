@@ -36,6 +36,31 @@ import pandas as pd
 # Import relevenat HARK tools
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
+# This is a jupytext paired notebook that autogenerates BufferStockTheory.py
+# which can be executed from a terminal command line via "ipython BufferStockTheory.py"
+# But a terminal does not permit inline figures, so we need to test jupyter vs terminal
+# Google "how can I check if code is executed in the ipython notebook"
+from IPython import get_ipython # In case it was run from python instead of ipython
+
+# If the ipython process contains 'terminal' assume not in a notebook
+def in_ipynb():
+    try:
+        if 'terminal' in str(type(get_ipython())):
+            return False
+        else:
+            return True
+    except NameError:
+        return False
+    
+# Determine whether to make the figures inline (for spyder or jupyter)
+# vs whatever is the automatic setting that will apply if run from the terminal
+if in_ipynb():
+    # %matplotlib inline generates a syntax error when run from the shell
+    # so do this instead
+    get_ipython().run_line_magic('matplotlib', 'inline')
+else:
+    get_ipython().run_line_magic('matplotlib', 'auto')
+
 # %% [markdown]
 # ### The base model
 #
@@ -246,6 +271,12 @@ plt.title('Risky Portfolio Policy Function')
 plt.legend()
 plt.grid()
 
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
+
 # %% [markdown]
 # We present the author's originally reported policy functions for comparison
 # <center><img src="Figures\Opt_shares_by_age.jpg" style="height:300px"></center>
@@ -272,6 +303,12 @@ plt.ylabel('Consumption')
 plt.title('Consumption Policy Function')
 plt.legend()
 plt.grid()
+
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
 
 # %% [markdown]
 # We again present the author's originally reported policy functions for comparison
@@ -311,12 +348,24 @@ plt.ylabel('Permanent income')
 plt.title('Simulated Income Paths')
 plt.grid()
 
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
+
 plt.figure()
 plt.plot(agent.t_age_hist+time_params['Age_born'], agent.RiskyShareNow_hist,'.')
 plt.xlabel('Age')
 plt.ylabel('Risky share')
 plt.title('Simulated Risky Portfolio Shares')
 plt.grid()
+
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
 
 # %% [markdown]
 # #### The average life cycle patterns
@@ -364,6 +413,12 @@ plt.xlabel('Age')
 plt.title('Variable Means Conditional on Survival')
 plt.grid()
 
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
+
 # %% [markdown]
 # <center><img src="Figures\ConsWInc.jpg" style="height:300px"></center>
 
@@ -382,6 +437,12 @@ plt.xlabel('Age')
 plt.ylabel('Risky Share')
 plt.title('Risky Portfolio Share Mean Conditional on Survival')
 plt.grid()
+
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True)
 
 # %% [markdown]
 # <center><img src="Figures\ShareMeanSim.jpg" style="height:300px"></center>
