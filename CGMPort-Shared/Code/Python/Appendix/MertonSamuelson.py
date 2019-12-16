@@ -64,11 +64,12 @@ for a in ages:
     plt.plot(eevalgrid,
              agent.solution[a-age_born].RiskyShareFunc[0][0](eevalgrid/norm_factor[a-age_born]),
              label = 'Age = %i' %(a))
-plt.axhline(agent.MertSamCampVicShare, c='r') # The Campbell-Viceira approximation
+plt.axhline(agent.MertSamCampVicShare, c='k',ls='--', label = 'M&S Share') # The Campbell-Viceira approximation
 plt.ylim(0,1.05)
 plt.text((aMax-aMin)/4,0.15,r'$\uparrow $ limit as  $m \uparrow \infty$',fontsize = 22,fontweight='bold')
 plt.legend()
 plt.title('Risky Portfolio Share by Age')
+plt.xlabel('Wealth (m)')
 
 # Save figure
 figname = 'Merton_Samuelson_Limit'

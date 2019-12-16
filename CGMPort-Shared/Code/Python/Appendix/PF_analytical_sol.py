@@ -103,10 +103,10 @@ for i in range(len(ages)):
     
     # Portfolio
     axs[i].plot(agrid, port_agent.solution[age-age_born].cFunc[0][0](agrid),
-                label = 'Port.')
+                label = 'PortfolioConsumerType')
     # Perfect foresight
     axs[i].plot(agrid, pf_agent.solution[age-age_born].cFunc(agrid),
-                label = 'PF.')
+                label = 'PerfForesightConsumerType')
     # True
     axs[i].plot(agrid, true_cFunc(age-age_born + 1, agrid),
                 label = 'True')
@@ -116,7 +116,11 @@ for i in range(len(ages)):
     
     axs[i].grid()
 
-axs[-1].legend()
+handles, labels = axs[-1].get_legend_handles_labels()
+fig.legend(handles, labels, loc='lower center', ncol = 3)
+
+fig.tight_layout(rect=[0, 0.1, 1, 0.95])
+fig.subplots_adjust(wspace=0.5)
 
 for ax in axs.flat:
     ax.set(xlabel='M', ylabel='C')
@@ -148,7 +152,7 @@ axs[0].set_title('PortfolioConsumerType', y = 1.05)
 axs[1].set_title('PerfForesightConsumerType', y = 1.05)
 
 plt.legend()
-fig.suptitle('Consumption Comparisons with True Solution', fontsize=16)
+fig.suptitle('Consumption Comparisons with True Solution')
 
 for ax in axs.flat:
     ax.set(xlabel='M', ylabel='C')

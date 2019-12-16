@@ -95,24 +95,24 @@ seaborn.despine(left=True)
 
 seaborn.heatmap(h_cons, ax = axes[0], vmin = 0, vmax = cmax)
 axes[0].set_title('HARK')
-axes[0].set_xlabel('Assets')
+axes[0].set_xlabel('Assets', labelpad = 10)
 axes[0].set_ylabel('Age')
 
 seaborn.heatmap(cons, ax = axes[1], vmin = 0, vmax = cmax)
 axes[1].set_title('CGM')
-axes[1].set_xlabel('Assets')
+axes[1].set_xlabel('Assets', labelpad = 10)
 axes[1].set_ylabel('Age')
 
 seaborn.heatmap(cons_error, ax = axes[2], center = 0)
 axes[2].set_title('HARK - CGM')
-axes[2].set_xlabel('Assets')
+axes[2].set_xlabel('Assets', labelpad = 10)
 axes[2].set_ylabel('Age')
 
 f.suptitle('$C(\cdot)$')
 
-f.tight_layout()
-f.subplots_adjust(top=0.8)
-
+f.tight_layout(rect=[0, 0.027, 1, 0.975])
+f.subplots_adjust(top=0.85)
+# %%
 # Save figure
 figname = 'Cons_Pol_Compare'
 plt.savefig(os.path.join(FigPath, figname + '.png'))
@@ -126,23 +126,23 @@ seaborn.despine(left=True)
 
 seaborn.heatmap(h_share, ax = axes[0], vmin = 0, vmax = 1)
 axes[0].set_title('HARK')
-axes[0].set_xlabel('Assets')
+axes[0].set_xlabel('Assets', labelpad = 10)
 axes[0].set_ylabel('Age')
 
 seaborn.heatmap(share, ax = axes[1], vmin = 0, vmax = 1)
 axes[1].set_title('CGM')
-axes[1].set_xlabel('Assets')
+axes[1].set_xlabel('Assets', labelpad = 10)
 axes[1].set_ylabel('Age')
 
 seaborn.heatmap(share_error, ax = axes[2], center = 0)
 axes[2].set_title('HARK - CGM')
-axes[2].set_xlabel('Assets')
+axes[2].set_xlabel('Assets', labelpad = 10)
 axes[2].set_ylabel('Age')
 
 f.suptitle('$S(\cdot)$')
 
-f.tight_layout()
-f.subplots_adjust(top=0.8)
+f.tight_layout(rect=[0, 0.027, 1, 0.975])
+f.subplots_adjust(top=0.85)
 
 # Save figure
 figname = 'RShare_Pol_Compare'

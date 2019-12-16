@@ -119,6 +119,8 @@ for i in range(len(years_comp)):
      axes[1,1].grid()
      
      f.suptitle('Year ' + str(year + time_params['Age_born']))
+     f.tight_layout(rect=[0, 0.027, 1, 0.975])
+     f.subplots_adjust(hspace=.5)
      
      # Save figure
      figname = 'PolFunc_Compare_Y' + str(year + time_params['Age_born'])
