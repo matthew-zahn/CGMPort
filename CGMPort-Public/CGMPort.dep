@@ -143,9 +143,37 @@
   *{file}   {ulasy.fd}    {1998/08/17 v2.2e}
   *{file}   {uwasy.fd}    {2003/10/30 v2.0}
   *{file}   {t1cmtt.fd}   {2014/09/29 v2.5h}
-  *{file}   {Equations/supfn.tex}{0000/00/00 v0.0}
-  *{file}   {Appendices/ApndxCGroIsPGro.tex}{0000/00/00 v0.0}
+  *{file}   {Equations/DynProb.tex}{0000/00/00 v0.0}
+  *{file}   {./Tables/Mapping.tex}{0000/00/00 v0.0}
+  *{file}   {omscmr.fd}   {2014/09/29 v2.5h}
+  *{file}   {./Tables/Calibration.tex}{0000/00/00 v0.0}
+  *{file}   {./Figures/RShare_Pol.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/RShare_Pol.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/Cons_Pol.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Cons_Pol.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/Y_Sim.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Y_Sim.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/RShare_Sim.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/RShare_Sim.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/YMC_Means.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/YMC_Means.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/RShare_Means.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/RShare_Means.pdf}{0000/00/00 v0.0}
+  *{file}   {./Figures/Alloc_rules.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Alloc_rules.jpg}{0000/00/00 v0.0}
+  *{file}   {./Figures/Util_cost.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Util_cost.jpg}{0000/00/00 v0.0}
+  *{file}   {Appendices/ApndxSensitivityAnalysis.tex}{0000/00/00 v0.0}
   *{file}   {./econtexRoot.tex}{0000/00/00 v0.0}
   *{file}   {./Appendices/onlyinsubfile.tex}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Cons_Pol_Compare.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/RShare_Pol_Compare.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/PolFunc_Compare_Y98.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/PolFunc_Compare_Y99.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Merton_Samuelson_Limit.pdf}{0000/00/00 v0.0}
+  *{file}   {ueuf.fd}     {2013/01/14 v3.01}
+  *{file}   {./Code/Python/Figures/MPC_Limit.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Pf_Compare_Lvl.pdf}{0000/00/00 v0.0}
+  *{file}   {./Code/Python/Figures/Pf_Compare_Diff.pdf}{0000/00/00 v0.0}
   *{file}   {CGMPort.bbl} {0000/00/00 v0.0}
 }

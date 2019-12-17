@@ -1,5 +1,4 @@
-[0] Config.pm:304> INFO - This is Biber 2.14
-[1] Config.pm:307> INFO - Logfile is 'CGMPort-NoAppendix.blg'
-[1464] biber-MSWIN64:322> INFO - === 
-[3096] Utils.pm:320> ERROR - Cannot find 'CGMPort-NoAppendix.bcf'!
-[3096] Biber.pm:132> INFO - ERRORS: 1
+This is BibTeX, Version 0.99dThe top-level auxiliary file: CGMPort-NoAppendix.aux
+The style file: ./texmf-local/bibtex/bst/econtex.bst
+Database file #1: ./CGMPort-Add.bib
+Done.

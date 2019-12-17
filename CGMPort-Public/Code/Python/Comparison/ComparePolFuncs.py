@@ -9,27 +9,38 @@ import numpy as np
 
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 
-# Since the calibration is in another folder, we need to add it to the path.
-import sys
-sys.path.append('../')
-from Calibration.params import dict_portfolio, time_params, norm_factor
-
 # Plotting tools
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import seaborn
+
+# %% Set up figure path
+import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
+FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% import Calibration
+sys.path.append('../')
+from Calibration.params import dict_portfolio, norm_factor
 
 # %% Setup
 
 # Path to fortran output
-pathFort = '../Fortran/'
+pathFort = os.path.join(my_file_path,"../Fortran/")
 
 # Asset grid
 npoints = 401
 agrid = np.linspace(4,npoints+3,npoints)
 
 # number of years
-nyears = 80
+nyears = dict_portfolio['T_cycle']
 
 # Initialize consumption, value, and share matrices
 # (rows = age, cols = assets)
@@ -84,23 +95,30 @@ seaborn.despine(left=True)
 
 seaborn.heatmap(h_cons, ax = axes[0], vmin = 0, vmax = cmax)
 axes[0].set_title('HARK')
-axes[0].set_xlabel('Assets')
+axes[0].set_xlabel('Assets', labelpad = 10)
 axes[0].set_ylabel('Age')
 
 seaborn.heatmap(cons, ax = axes[1], vmin = 0, vmax = cmax)
 axes[1].set_title('CGM')
-axes[1].set_xlabel('Assets')
+axes[1].set_xlabel('Assets', labelpad = 10)
 axes[1].set_ylabel('Age')
 
 seaborn.heatmap(cons_error, ax = axes[2], center = 0)
 axes[2].set_title('HARK - CGM')
-axes[2].set_xlabel('Assets')
+axes[2].set_xlabel('Assets', labelpad = 10)
 axes[2].set_ylabel('Age')
 
 f.suptitle('$C(\cdot)$')
 
-f.tight_layout()
-f.subplots_adjust(top=0.8)
+f.tight_layout(rect=[0, 0.027, 1, 0.975])
+f.subplots_adjust(top=0.85)
+# %%
+# Save figure
+figname = 'Cons_Pol_Compare'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
 
 # Risky share
 f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
@@ -108,20 +126,27 @@ seaborn.despine(left=True)
 
 seaborn.heatmap(h_share, ax = axes[0], vmin = 0, vmax = 1)
 axes[0].set_title('HARK')
-axes[0].set_xlabel('Assets')
+axes[0].set_xlabel('Assets', labelpad = 10)
 axes[0].set_ylabel('Age')
 
 seaborn.heatmap(share, ax = axes[1], vmin = 0, vmax = 1)
 axes[1].set_title('CGM')
-axes[1].set_xlabel('Assets')
+axes[1].set_xlabel('Assets', labelpad = 10)
 axes[1].set_ylabel('Age')
 
 seaborn.heatmap(share_error, ax = axes[2], center = 0)
 axes[2].set_title('HARK - CGM')
-axes[2].set_xlabel('Assets')
+axes[2].set_xlabel('Assets', labelpad = 10)
 axes[2].set_ylabel('Age')
 
 f.suptitle('$S(\cdot)$')
 
-f.tight_layout()
-f.subplots_adjust(top=0.8)
+f.tight_layout(rect=[0, 0.027, 1, 0.975])
+f.subplots_adjust(top=0.85)
+
+# Save figure
+figname = 'RShare_Pol_Compare'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))

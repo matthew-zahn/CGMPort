@@ -131,7 +131,10 @@ gr_fac = np.exp(np.diff(np.log(det_income)))
 # Now we have growth factors for T_end-1 periods.
 
 # Finally define the normalization factor used by CGM, for plots.
-norm_factor = det_income * np.exp(1)
+# ### IMPORTANT ###
+# We adjust this normalization factor for what we believe is a typo in the
+# original article. See the REMARK jupyter notebook for details.
+norm_factor = det_income * np.exp(0)
 
 # %% Shocks
 

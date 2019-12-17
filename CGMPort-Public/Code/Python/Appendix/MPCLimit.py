@@ -2,7 +2,6 @@
 # result in 
 # http://www.econ2.jhu.edu/people/ccarroll/public/LectureNotes/Consumption/CRRA-RateRisk.pdf
 
-
 import HARK.ConsumptionSaving.ConsPortfolioModel as cpm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,20 +9,40 @@ import numpy as np
 from HARK.utilities import approxLognormal
 from HARK.simulation import drawLognormal
 
-# Import parameters from external file
+from copy import copy
+
+# %% Set up figure path
 import sys,os
+
+# Determine if this is being run as a standalone script
+if __name__ == '__main__':
+    # Running as a script
+    my_file_path = os.path.abspath("../")
+else:
+    # Running from do_ALL
+    my_file_path = os.path.dirname(os.path.abspath("do_ALL.py"))
+
+FigPath = os.path.join(my_file_path,"Figures/")
+
+# %% Import calibration
+# Import parameters from external file
 sys.path.append(os.path.realpath('../')) 
 # Loading the parameters from the ../Code/Calibration/params.py script
 from Calibration.params import dict_portfolio, time_params
 
+# %% Setup
+
 # Adjust certain parameters to get the Merton-Samuelson result
 
+# Make new dictionary
+mpc_dict = copy(dict_portfolio)
+
 # Make riskless return factor very low so that nobody invests in it.
-dict_portfolio['Rfree'] = 0.01
+mpc_dict['Rfree'] = 0.01
 # Make the agent less risk averse
-dict_portfolio['CRRA'] = 2
+mpc_dict['CRRA'] = 2
 # Do away with probability of death
-dict_portfolio['LivPrb'] = [1]*dict_portfolio['T_cycle']
+mpc_dict['LivPrb'] = [1]*dict_portfolio['T_cycle']
 
 # Risky returns
 mu = 0.05
@@ -34,10 +53,10 @@ RiskyDstnFunc = lambda count: approxLognormal(count, mu = mu, sigma = std)
 # Contruct function for drawing returns
 RiskyDrawFunc = lambda seed: drawLognormal(1, mu = mu, sigma = std, seed = seed)
 
-dict_portfolio['approxRiskyDstn'] = RiskyDstnFunc
-dict_portfolio['drawRiskyFunc'] = RiskyDrawFunc
+mpc_dict['approxRiskyDstn'] = RiskyDstnFunc
+mpc_dict['drawRiskyFunc'] = RiskyDrawFunc
 
-agent = cpm.PortfolioConsumerType(**dict_portfolio)
+agent = cpm.PortfolioConsumerType(**mpc_dict)
 agent.cylces = 0
 agent.solve()
 
@@ -86,3 +105,10 @@ plt.axhline(MPC_lim, c = 'k',ls='--', label = 'Merton Samuelson' )
 plt.legend()
 plt.title('MPC approximation: $c(m+1) - c(m)$')
 plt.xlabel('Market Resources $m$')
+
+# Save figure
+figname = 'MPC_Limit'
+plt.savefig(os.path.join(FigPath, figname + '.png'))
+plt.savefig(os.path.join(FigPath, figname + '.jpg'))
+plt.savefig(os.path.join(FigPath, figname + '.pdf'))
+plt.savefig(os.path.join(FigPath, figname + '.svg'))
