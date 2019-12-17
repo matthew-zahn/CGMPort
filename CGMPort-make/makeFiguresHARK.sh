@@ -10,10 +10,8 @@ SharedDir="$(realpath "$scriptDir/../$baseName-Shared")" # e.g., BufferStockTheo
 toolsDir=/Methods/Tools/Scripts # Extra tools
 
 scriptDir="$(dirname "$0")" 
-#cd $scriptDir/../"$baseName"-Shared/Code/Python
+cd $scriptDir/../"$baseName"-Shared/Code/Python
 
 #ipython ./CGM_REMARK.py
 
-cd $scriptDir/../"$baseName"-Shared
-
-ipython ./do_all.py
+ipython ./do_ALL.py
