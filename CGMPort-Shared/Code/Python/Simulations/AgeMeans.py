@@ -82,6 +82,10 @@ plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
 
+plt.ioff()
+plt.draw()
+plt.pause(1)
+
 # %% Risky Share
 
 # Find age percentiles
@@ -105,3 +109,7 @@ plt.savefig(os.path.join(FigPath, figname + '.png'))
 plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
+plt.ioff()
+plt.draw()
+plt.pause(1)

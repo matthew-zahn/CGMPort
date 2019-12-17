@@ -34,7 +34,7 @@ agent.solve()
 # %%
 # Plot portfolio rule
 eevalgrid = np.linspace(0,300,100)
-plt.figure()
+
 # In the last period of life you consume everything
 # so portfolio choice is irrelevant
 
@@ -58,6 +58,9 @@ plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
 
+plt.ioff()
+plt.draw()
+plt.pause(1)
 
 # Plot consumption function
 plt.figure()
@@ -77,3 +80,7 @@ plt.savefig(os.path.join(FigPath, figname + '.png'))
 plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
+plt.ioff()
+plt.draw()
+plt.pause(1)

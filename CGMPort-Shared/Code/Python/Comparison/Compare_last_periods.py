@@ -129,5 +129,9 @@ for i in range(len(years_comp)):
      plt.savefig(os.path.join(FigPath, figname + '.pdf'))
      plt.savefig(os.path.join(FigPath, figname + '.svg'))
      
+     plt.ioff()
+     plt.draw()
+     plt.pause(1)
+     
 cons_error   = h_cons - cons
 share_error = h_share - share
