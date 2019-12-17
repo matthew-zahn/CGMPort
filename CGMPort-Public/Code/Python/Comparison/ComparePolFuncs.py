@@ -112,13 +112,17 @@ f.suptitle('$C(\cdot)$')
 
 f.tight_layout(rect=[0, 0.027, 1, 0.975])
 f.subplots_adjust(top=0.85)
-# %%
+
 # Save figure
 figname = 'Cons_Pol_Compare'
 plt.savefig(os.path.join(FigPath, figname + '.png'))
 plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
+plt.ioff()
+plt.draw()
+plt.pause(1)
 
 # Risky share
 f, axes = plt.subplots(1, 3, figsize=(10, 4), sharex=True)
@@ -150,3 +154,7 @@ plt.savefig(os.path.join(FigPath, figname + '.png'))
 plt.savefig(os.path.join(FigPath, figname + '.jpg'))
 plt.savefig(os.path.join(FigPath, figname + '.pdf'))
 plt.savefig(os.path.join(FigPath, figname + '.svg'))
+
+plt.ioff()
+plt.draw()
+plt.pause(1)
