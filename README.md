@@ -21,3 +21,14 @@ We upload our entire work environment to show we replicated the framework exempl
 1. The original Fortran 90 code made available by the authors can be found in [<tt>CGMPort-Public/Code/Fortran</tt>](https://github.com/matthew-zahn/CGMPort/tree/master/CGMPort-Public/Code/Fortran).
 
 1. A bash script that produces all the results and generates all the documents can be found in [<tt>CGMPort-make/doEverything.sh</tt>](https://github.com/matthew-zahn/CGMPort/blob/master/CGMPort-make/doEverything.sh).
+
+## Package requirements
+
+The following packages are required for executing the <tt>REMARK</tt> notebook:
+- matplotlib
+- numpy
+- scipy
+- pandas
+- econ-ark >= 0.10.3
+For executing <tt>do_ALL.py</tt> additional requirements are:
+- seaborn
