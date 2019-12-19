@@ -30,5 +30,6 @@ The following packages are required for executing the <tt>REMARK</tt> notebook:
 - scipy
 - pandas
 - econ-ark >= 0.10.3
+
 For executing <tt>do_ALL.py</tt> additional requirements are:
 - seaborn
