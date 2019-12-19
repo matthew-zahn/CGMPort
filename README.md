@@ -3,7 +3,7 @@
 # A replication by Mateo Velásquez-Giraldo and Matthew Zahn.
 
 **Quick launch**: the following link launches a Jupyter notebook with the main results.
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matthew-zahn/CGMPort/master?filepath=CGMPort%2FCGMPort-Shared%2FCode%2FPython%2FCGM_REMARK.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matthew-zahn/CGMPort/master?filepath=CGMPort-Public%2FCode%2FPython%2FCGM_REMARK.ipynb)
 
 ## Description
 
