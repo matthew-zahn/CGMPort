@@ -33,11 +33,11 @@ agent.solve()
 # %% Run simulation and store results in a data frame
 
 # Number of agents and periods in the simulation.
-agent.AgentCount = 50 # Number of instances of the class to be simulated.
+agent.AgentCount = 5 # Number of instances of the class to be simulated.
 # Since agents can die, they are replaced by a new agent whenever they do.
 
 # Number of periods to be simulated
-agent.T_sim = agent.T_cycle*50
+agent.T_sim = agent.T_cycle*5
 
 # Set up the variables we want to keep track of.
 agent.track_vars = ['aNrmNow','cNrmNow', 'pLvlNow',
